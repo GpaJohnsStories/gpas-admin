@@ -205,7 +205,7 @@
     <h1>Days That Matter</h1>
     
     <button class="add-new-btn" onclick="addNewRow()">Add New Special Day</button>
-	<button class="update-dates-btn" onclick="updateAllPastDates()">Update ALL Past Dates</button>
+	<button class="update-dates-btn" onclick="updateAllPastDates()"><b></b>Update ALL Fixed and Calculated Past Dates</b></button>
 	
     <div class="filters">
         <strong style="margin-right: 20px;">Filter Days that Matter:</strong>
@@ -675,7 +675,8 @@
     }
 
 async function updateAllPastDates() {
-    if (!confirm('This will update fixed and calculated dates. Web-search holidays will stay gray for manual update.')) {
+    if (!confirm('This will update fixed and calculated dates. <br>
+                 Web-search holidays will stay gray for manual update.')) {
         return;
     }
     
