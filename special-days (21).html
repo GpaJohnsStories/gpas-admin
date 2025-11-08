@@ -323,10 +323,11 @@
                 <td class="action-buttons">
                     <button class="btn btn-edit" onclick="editRow('${day.id}')">Edit</button>
                     <button class="btn btn-delete" onclick="deleteRow('${day.id}')">Delete</button>
-                </td>
+                    </td>
             `;
             tbody.appendChild(row);
-            
+            console.log('Column 7:', row.cells[6].innerHTML, 'Column 8:', row.cells[7].innerHTML);
+
             // Load story preview for this row
             loadStoryPreview(row, day.text_code);
         });
