@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Add after <head> tag -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+    // Initialize Supabase - you'll need your project URL and anon key
+    const SUPABASE_URL = 'https://hlywucxwpzbqmzssmwpj.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhseXd1Y3h3cHpicW16c3Ntd3BqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg5MTQwNTMsImV4cCI6MjA2NDQ5MDA1M30.m72-z_MYxyijIqclV9hJplTNen02IdLLCOv7w3ZoHfY';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+</script>
+    
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Days</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        /* Filter section */
+        .filters {
+            background: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .filters label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .filters select {
+            margin-right: 20px;
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        /* Table styles */
+        table {
+            width: 100%;
+            background: white;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background-color: #4a90e2;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        th:hover {
+            background-color: #357abd;
+        }
+        
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        /* Input and select styles in table */
+        td input, td select {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        td input[type="date"] {
+            width: 130px;
+        }
+        
+        .text-code-input {
+            text-transform: uppercase;
+            font-family: monospace;
+        }
+        
+        /* Button styles */
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .btn {
+            padding: 5px 15px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: opacity 0.2s;
+        }
+        
+        .btn:hover {
+            opacity: 0.8;
+        }
+        
+        .btn-add {
+            background-color: #4caf50;
+            color: white;
+        }
+        
+        .btn-edit {
+            background-color: #ff9800;
+            color: white;
+        }
+        
+        .btn-delete {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        .btn-save {
+            background-color: #2196f3;
+            color: white;
+        }
+        
+        .btn-cancel {
+            background-color: #757575;
+            color: white;
+        }
+        
+        /* Story preview section */
+        .story-preview {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+        }
+        
+        .story-preview img {
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        
+        .story-details {
+            line-height: 1.4;
+        }
+        
+        /* Add new row button */
+        .add-new-btn {
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .add-new-btn:hover {
+            opacity: 0.8;
+        }
+        
+        /* Sort indicators */
+        .sort-indicator {
+            margin-left: 5px;
+            font-size: 12px;
+        }
+    .past-date {
+        background-color: #d0d0d0;
+        opacity: 0.8;
+    }
+		tr.past-date:hover {
+    background-color: #d0d0d0 !important;
+}
+		
+		.update-dates-btn {
+    margin: 0 0 20px 10px;
+    padding: 10px 20px;
+    background-color: #f44336;  /* Red background */
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+		
+    </style>
+</head>
+<body>
+    <h1>Days That Matter</h1>
+    
+    <button class="add-new-btn" onclick="addNewRow()">Add New Special Day</button>
+	<button class="update-dates-btn" onclick="updateAllPastDates()">Update ALL Past Dates</button>
+	
+    <div class="filters">
+        <strong style="margin-right: 20px;">Filter Days that Matter:</strong>
+        <label for="siteFilter">Site:</label>
+        <select id="siteFilter" onchange="filterTable()">
+            <option value="ALL">ALL</option>
+            <option value="KIDS">KIDS</option>
+            <option value="FAITH">FAITH</option>
+            <option value="SHOP">SHOP</option>
+        </select>
+        
+        <label for="countryFilter">Country:</label>
+        <select id="countryFilter" onchange="filterTable()">
+            <option value="ALL">ALL</option>
+            <option value="US">US</option>
+            <option value="Australia">Australia</option>
+            <option value="Austria">Austria</option>
+            <option value="Canada">Canada</option>
+            <option value="England">England</option>
+            <option value="France">France</option>
+            <option value="Germany">Germany</option>
+            <option value="Ireland">Ireland</option>
+            <option value="Japan">Japan</option>
+            <option value="Mexico">Mexico</option>
+            <option value="Netherlands">Netherlands</option>
+            <option value="Norway">Norway</option>
+            <option value="Russia">Russia</option>
+            <option value="Scotland">Scotland</option>
+            <option value="Spain">Spain</option>
+        </select>
+    </div>
+    
+    <table id="specialDaysTable">
+        <thead>
+            <tr>
+                <th onclick="sortTable(0)">Country <span class="sort-indicator">↕</span></th>
+                <th onclick="sortTable(1)">Start Date <span class="sort-indicator">↕</span></th>
+                <th onclick="sortTable(2)">End Date <span class="sort-indicator">↕</span></th>
+                <th onclick="sortTable(3)">Title <span class="sort-indicator">↕</span></th>
+                <th onclick="sortTable(4)">Site <span class="sort-indicator">↕</span></th>
+                <th>Text Code</th>
+                <th>Story Preview</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+                  </tbody>
+    </table>
+    
+<script>
+    // Country list with US at top
+    const countries = ['US', 'Australia', 'Austria', 'Canada', 'England', 'France', 'Germany', 'Ireland', 'Japan', 'Mexico', 'Netherlands', 'Norway', 'Russia', 'Scotland', 'Spain'];
+    
+    // Holiday titles
+    const holidays = [
+        'Christmas Day', 'Day of the Dead', 'Easter', 'Halloween', 'Hanukkah',
+        'Independence Day', 'Labor Day', 'Memorial Day', 'New Year\'s Day',
+        'Passover', 'President\'s Day', 'St. Patrick\'s Day', 'Thanksgiving Day',
+        'Valentine\'s Day', 'Veteran\'s Day'
+    ].sort();
+    
+    // Sites
+    const sites = ['KIDS', 'FAITH', 'SHOP'];
+    
+    let specialDays = [];
+    let editingRow = null;
+    
+    // Load special days from Supabase on page load
+    window.addEventListener('load', loadSpecialDays);
+    
+    // Load all special days
+    async function loadSpecialDays() {
+        const { data, error } = await supabase
+            .from('special_days')
+            .select('*')
+            .order('start_date', { ascending: true });
+        
+        if (error) {
+            console.error('Error loading special days:', error);
+            return;
+        }
+        
+        specialDays = data || [];
+        displaySpecialDays();
+    }
+    
+    // Display special days in table
+    function displaySpecialDays() {
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = '';
+        
+        specialDays.forEach(day => {
+            const row = document.createElement('tr');
+			// Check if date is in the past
+			if (day.start_date < new Date().toISOString().split('T')[0]) {
+    row.classList.add('past-date');
+}
+            row.innerHTML = `
+                <td>${day.country}</td>
+                <td>${formatDate(day.start_date)}</td>
+                <td>${formatDate(day.end_date)}</td>
+                <td>${day.title}</td>
+                <td>${day.site}</td>
+                <td>${day.text_code}</td>
+                <td class="story-preview" data-text-code="${day.text_code}">Loading...</td>
+                <td class="action-buttons">
+                    <button class="btn btn-edit" onclick="editRow('${day.id}')">Edit</button>
+                    <button class="btn btn-delete" onclick="deleteRow('${day.id}')">Delete</button>
+                </td>
+            `;
+            tbody.appendChild(row);
+            
+            // Load story preview for this row
+            loadStoryPreview(row, day.text_code);
+        });
+    }
+    
+    // Create country dropdown HTML
+    function getCountryOptions(selected = 'US') {
+        let html = '';
+        countries.forEach(country => {
+            html += `<option value="${country}" ${country === selected ? 'selected' : ''}>${country}</option>`;
+        });
+        return html;
+    }
+    
+    // Create holiday dropdown HTML
+    function getHolidayOptions(selected = '') {
+        let html = '<option value="">Select...</option>';
+        holidays.forEach(holiday => {
+            html += `<option value="${holiday}" ${holiday === selected ? 'selected' : ''}>${holiday}</option>`;
+        });
+        return html;
+    }
+    
+    // Create site dropdown HTML
+    function getSiteOptions(selected = '') {
+        let html = '<option value="">Select...</option>';
+        sites.forEach(site => {
+            html += `<option value="${site}" ${site === selected ? 'selected' : ''}>${site}</option>`;
+        });
+        return html;
+    }
+    
+    // Format date for input fields
+    function formatDate(dateStr) {
+        if (!dateStr) return '';
+        const date = new Date(dateStr);
+        return date.toISOString().split('T')[0];
+    }
+    
+    // Add new row for creating special day
+    function addNewRow() {
+        const tbody = document.getElementById('tableBody');
+        const newRow = document.createElement('tr');
+        newRow.className = 'new-row';
+        
+        newRow.innerHTML = `
+            <td><select class="country-select">${getCountryOptions()}</select></td>
+            <td><input type="date" class="start-date" min="${new Date().toISOString().split('T')[0]}"></td>
+            <td><input type="date" class="end-date"></td>
+            <td><select class="title-select">${getHolidayOptions()}</select></td>
+            <td><select class="site-select">${getSiteOptions()}</select></td>
+            <td><input type="text" class="text-code-input" maxlength="7" placeholder="ABC-123" oninput="this.value = this.value.toUpperCase()"></td>
+            <td class="story-preview">Click Submit to load story</td>
+            <td class="action-buttons">
+                <button class="btn btn-save" onclick="submitNewRow(this)">Submit</button>
+                <button class="btn btn-cancel" onclick="cancelNewRow(this)">Cancel</button>
+            </td>
+        `;
+        
+        tbody.insertBefore(newRow, tbody.firstChild);
+        
+        // Add date validation
+        const startDate = newRow.querySelector('.start-date');
+        const endDate = newRow.querySelector('.end-date');
+        
+        startDate.addEventListener('change', function() {
+            endDate.min = this.value;
+            if (endDate.value && endDate.value < this.value) {
+                endDate.value = this.value;
+            }
+        });
+    }
+    
+    // Submit new row
+    async function submitNewRow(btn) {
+        const row = btn.closest('tr');
+        const country = row.querySelector('.country-select').value;
+        const startDate = row.querySelector('.start-date').value;
+        const endDate = row.querySelector('.end-date').value;
+        const title = row.querySelector('.title-select').value;
+        const site = row.querySelector('.site-select').value;
+        const textCode = row.querySelector('.text-code-input').value.toUpperCase();
+        
+        // Validate all fields
+        if (!country || !startDate || !endDate || !title || !site || !textCode) {
+            alert('Please fill in all fields');
+            return;
+        }
+        
+        // Validate text code format
+        if (!/^[A-Z]{3}-[A-Z0-9]{3}$/.test(textCode)) {
+            alert('Text code must be in format ABC-123 (3 letters, dash, 3 alphanumeric)');
+            return;
+        }
+        
+        // Save to Supabase
+        const { data, error } = await supabase
+            .from('special_days')
+            .insert([{
+                country,
+                start_date: startDate,
+                end_date: endDate,
+                title,
+                site,
+                text_code: textCode
+            }])
+            .select()
+            .single();
+        
+        if (error) {
+            alert('Error saving: ' + error.message);
+            return;
+        }
+        
+        // Add to local array
+        specialDays.unshift(data);
+        
+        // Load story preview
+        await loadStoryPreview(row, textCode);
+        
+        // Convert to regular row
+        convertToDisplayRow(row, data);
+    }
+    
+    // Load story preview from stories table
+    async function loadStoryPreview(row, textCode) {
+        const previewCell = row.querySelector('.story-preview') || row.cells[6];
+        
+        const { data, error } = await supabase
+            .from('stories')
+            .select('photo_link_1, site, story_code, title, author, category, publication_status_code, color_preset_id')
+            .eq('story_code', textCode)
+            .single();
+        
+        if (error || !data) {
+            previewCell.innerHTML = '<em>Story not found</em>';
+            return;
+        }
+        
+        previewCell.innerHTML = `
+            <div class="story-preview">
+                <img src="${data.photo_link_1 || 'placeholder.jpg'}" width="55" height="55" alt="${textCode}">
+                <div class="story-details">
+                    <strong>${data.title}</strong><br>
+                    ${data.author} | ${data.category}<br>
+                    Status: ${data.publication_status_code}
+                </div>
+            </div>
+        `;
+    }
+    
+    // Cancel new row
+    function cancelNewRow(btn) {
+        const row = btn.closest('tr');
+        row.remove();
+    }
+    
+    // Convert to display row after save
+    function convertToDisplayRow(row, data) {
+        row.className = '';
+        row.innerHTML = `
+            <td>${data.country}</td>
+            <td>${formatDate(data.start_date)}</td>
+            <td>${formatDate(data.end_date)}</td>
+            <td>${data.title}</td>
+            <td>${data.site}</td>
+            <td>${data.text_code}</td>
+            <td class="story-preview" data-text-code="${data.text_code}">Loading...</td>
+            <td class="action-buttons">
+                <button class="btn btn-edit" onclick="editRow('${data.id}')">Edit</button>
+                <button class="btn btn-delete" onclick="deleteRow('${data.id}')">Delete</button>
+            </td>
+        `;
+    }
+    
+    // Edit existing row
+    function editRow(id) {
+        const day = specialDays.find(d => d.id === id);
+        if (!day) return;
+        
+        const rows = document.getElementById('tableBody').rows;
+        for (let row of rows) {
+            if (row.cells[7] && row.cells[7].innerHTML.includes(id)) {
+                editingRow = row;
+                row.innerHTML = `
+                    <td><select class="country-select">${getCountryOptions(day.country)}</select></td>
+                    <td><input type="date" class="start-date" value="${formatDate(day.start_date)}"></td>
+                    <td><input type="date" class="end-date" value="${formatDate(day.end_date)}"></td>
+                    <td><select class="title-select">${getHolidayOptions(day.title)}</select></td>
+                    <td><select class="site-select">${getSiteOptions(day.site)}</select></td>
+                    <td><input type="text" class="text-code-input" value="${day.text_code}" maxlength="7" oninput="this.value = this.value.toUpperCase()"></td>
+                    <td class="story-preview">Click Save to reload story</td>
+                    <td class="action-buttons">
+                        <button class="btn btn-save" onclick="saveEdit('${id}')">Save</button>
+                        <button class="btn btn-cancel" onclick="cancelEdit('${id}')">Cancel</button>
+                    </td>
+                `;
+                
+                // Add date validation
+                const startDate = row.querySelector('.start-date');
+                const endDate = row.querySelector('.end-date');
+                
+                startDate.addEventListener('change', function() {
+                    endDate.min = this.value;
+                    if (endDate.value && endDate.value < this.value) {
+                        endDate.value = this.value;
+                    }
+                });
+                
+                break;
+            }
+        }
+    }
+    
+    // Save edited row
+    async function saveEdit(id) {
+        const row = editingRow;
+        const country = row.querySelector('.country-select').value;
+        const startDate = row.querySelector('.start-date').value;
+        const endDate = row.querySelector('.end-date').value;
+        const title = row.querySelector('.title-select').value;
+        const site = row.querySelector('.site-select').value;
+        const textCode = row.querySelector('.text-code-input').value.toUpperCase();
+        
+        // Validate
+        if (!country || !startDate || !endDate || !title || !site || !textCode) {
+            alert('Please fill in all fields');
+            return;
+        }
+        
+        if (!/^[A-Z]{3}-[A-Z0-9]{3}$/.test(textCode)) {
+            alert('Text code must be in format ABC-123');
+            return;
+        }
+        
+        // Update in Supabase
+        const { data, error } = await supabase
+            .from('special_days')
+            .update({
+                country,
+                start_date: startDate,
+                end_date: endDate,
+                title,
+                site,
+                text_code: textCode
+            })
+            .eq('id', id)
+            .select()
+            .single();
+        
+        if (error) {
+            alert('Error updating: ' + error.message);
+            return;
+        }
+        
+        // Update local array
+        const index = specialDays.findIndex(d => d.id === id);
+        specialDays[index] = data;
+        
+        // Load story preview
+        await loadStoryPreview(row, textCode);
+        
+        // Convert back to display row
+        convertToDisplayRow(row, data);
+        editingRow = null;
+    }
+    
+    // Cancel edit
+    function cancelEdit(id) {
+        const day = specialDays.find(d => d.id === id);
+        if (!day) return;
+        
+        convertToDisplayRow(editingRow, day);
+        loadStoryPreview(editingRow, day.text_code);
+        editingRow = null;
+    }
+    
+    // Delete row
+    async function deleteRow(id) {
+        if (!confirm('Are you sure you want to delete this special day?')) {
+            return;
+        }
+        
+        const { error } = await supabase
+
+            .from('special_days')
+            .delete()
+            .eq('id', id);
+        
+        if (error) {
+            alert('Error deleting: ' + error.message);
+            return;
+        }
+        
+        // Remove from local array
+        specialDays = specialDays.filter(d => d.id !== id);
+        
+        // Remove row from table
+        const rows = document.getElementById('tableBody').rows;
+        for (let row of rows) {
+            if (row.cells[7] && row.cells[7].innerHTML.includes(id)) {
+                row.remove();
+                break;
+            }
+        }
+    }
+    
+    // Filter table by site and country
+    function filterTable() {
+        const siteFilter = document.getElementById('siteFilter').value;
+        const countryFilter = document.getElementById('countryFilter').value;
+        
+        const tbody = document.getElementById('tableBody');
+        const rows = tbody.getElementsByTagName('tr');
+        
+        for (let row of rows) {
+            const site = row.cells[4].textContent;
+            const country = row.cells[0].textContent;
+            
+            const siteMatch = siteFilter === 'ALL' || site === siteFilter;
+            const countryMatch = countryFilter === 'ALL' || country === countryFilter;
+            
+            row.style.display = (siteMatch && countryMatch) ? '' : 'none';
+        }
+    }
+    
+    // Sort table
+    let sortDirection = {};
+    
+    function sortTable(column) {
+        const tbody = document.getElementById('tableBody');
+        const rows = Array.from(tbody.rows);
+        
+        // Toggle sort direction
+        sortDirection[column] = sortDirection[column] === 'asc' ? 'desc' : 'asc';
+        
+        rows.sort((a, b) => {
+            let aValue = a.cells[column].textContent;
+            let bValue = b.cells[column].textContent;
+            
+            // Handle dates
+            if (column === 1 || column === 2) {
+                aValue = new Date(aValue);
+                bValue = new Date(bValue);
+            }
+            
+            if (aValue < bValue) return sortDirection[column] === 'asc' ? -1 : 1;
+            if (aValue > bValue) return sortDirection[column] === 'asc' ? 1 : -1;
+            return 0;
+        });
+        
+        // Clear and re-add rows
+        tbody.innerHTML = '';
+        rows.forEach(row => tbody.appendChild(row));
+    }
+
+async function updateAllPastDates() {
+    if (!confirm('This will update fixed and calculated dates. Web-search holidays will stay gray for manual update.')) {
+        return;
+    }
+    
+    const today = new Date().toISOString().split('T')[0];
+    
+    // Define which holidays need calculations
+    const needsCalculation = ['Thanksgiving', 'Mother\'s Day', 'Father\'s Day', 'Memorial Day', 'Labor Day'];
+    
+    // Define which holidays need web search (skip these!)
+    const needsWebSearch = ['Easter', 'Passover', 'Hanukkah', 'Ramadan', 'Eid al-Fitr', 'Diwali', 'Chinese New Year'];
+    
+    const { data: pastDays, error } = await supabase
+        .from('special_days')
+        .select('*')
+        .lt('start_date', today);
+    
+    if (error) {
+        alert('Error: ' + error.message);
+        return;
+    }
+    
+    let count = 0;
+    let skipped = 0;
+    
+    for (const day of pastDays) {
+        // Skip web-search holidays - leave them gray!
+        if (needsWebSearch.includes(day.title)) {
+            skipped++;
+            continue;
+        }
+        
+        let newStart, newEnd;
+        
+        if (needsCalculation.includes(day.title)) {
+            // Calculate special dates
+            const year = new Date(day.start_date).getFullYear() + 1;
+            newStart = calculateHoliday(day.title, year);
+            newEnd = newStart;
+        } else {
+            // Fixed dates - just add 1 year
+            newStart = new Date(day.start_date);
+            newStart.setFullYear(newStart.getFullYear() + 1);
+            newStart = newStart.toISOString().split('T')[0];
+            
+            newEnd = new Date(day.end_date);
+            newEnd.setFullYear(newEnd.getFullYear() + 1);
+            newEnd = newEnd.toISOString().split('T')[0];
+        }
+        
+        await supabase
+            .from('special_days')
+            .update({ 
+                start_date: newStart,
+                end_date: newEnd
+            })
+            .eq('id', day.id);
+            
+        count++;
+    }
+    
+    alert(`Updated ${count} dates!\n${skipped} holidays need manual update (still gray).`);
+    location.reload();
+}
+
+// Add this calculation function
+function calculateHoliday(holiday, year) {
+    const date = new Date(year, 0, 1); // Start with Jan 1
+    
+    switch(holiday) {
+        case 'Thanksgiving':
+            // 4th Thursday of November
+            date.setMonth(10); // November (0-based)
+            date.setDate(1);   // Start at Nov 1
+            // Find first Thursday
+            while (date.getDay() !== 4) date.setDate(date.getDate() + 1);
+            // Add 3 weeks for 4th Thursday
+            date.setDate(date.getDate() + 21);
+            break;
+            
+        case 'Mother\'s Day':
+            // 2nd Sunday of May
+            date.setMonth(4); // May
+            date.setDate(1);
+            // Find first Sunday
+            while (date.getDay() !== 0) date.setDate(date.getDate() + 1);
+            // Add 1 week for 2nd Sunday
+            date.setDate(date.getDate() + 7);
+            break;
+            
+        case 'Father\'s Day':
+            // 3rd Sunday of June
+            date.setMonth(5); // June
+            date.setDate(1);
+            while (date.getDay() !== 0) date.setDate(date.getDate() + 1);
+            date.setDate(date.getDate() + 14); // Add 2 weeks for 3rd
+            break;
+            
+        case 'Memorial Day':
+            // Last Monday of May
+            date.setMonth(4); // May
+            date.setDate(31); // Start at end
+            // Work backwards to find last Monday
+            while (date.getDay() !== 1) date.setDate(date.getDate() - 1);
+            break;
+            
+        case 'Labor Day':
+            // 1st Monday of September
+            date.setMonth(8); // September
+            date.setDate(1);
+            while (date.getDay() !== 1) date.setDate(date.getDate() + 1);
+            break;
+    }
+    
+    return date.toISOString().split('T')[0];
+}
+	
+</script>
+
+            
+</body>
+</html>
