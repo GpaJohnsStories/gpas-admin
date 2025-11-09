@@ -388,15 +388,57 @@ async function loadStoryData(row1, row2, textCode) {
         return html;
     }
 
-// Display special days in table
+// Display special days in table - NEW TWO-ROW LAYOUT
 function displaySpecialDays() {
     const tbody = document.getElementById('tableBody');
     tbody.innerHTML = '';
     
     specialDays.forEach(day => {
-        // ... old code ...
+        // Check if this date is in the past
+        const isPast = day.start_date < new Date().toISOString().split('T')[0];
+        
+        // ROW 1: Main special day information
+        const row1 = document.createElement('tr');
+        if (isPast) row1.classList.add('past-date');
+        
+        // Create the HTML for row 1
+        row1.innerHTML = `
+            <td rowspan="2" class="bold">${day.country === 'US' ? 'USA' : day.country}</td>
+            <td rowspan="2" class="bold">${day.site}</td>
+            <td class="bold" style="text-align: center;">${formatDate(day.start_date)}</td>
+            <td style="text-align: center;">${formatDate(day.end_date)}</td>
+            <td class="bold">${day.title}</td>
+            <td rowspan="2" class="photo-cell"></td>
+            <td class="bold">${day.text_code}</td>
+            <td class="category-cell">Loading...</td>
+            <td rowspan="2" class="action-buttons" style="vertical-align: middle;">
+                <button class="btn btn-edit" onclick="editRow('${day.id}')" title="Edit">✏️</button><br><br>
+                <button class="btn btn-delete" onclick="deleteRow('${day.id}')" title="Delete">🗑️</button>
+            </td>
+        `;
+        tbody.appendChild(row1);
+        
+        // ROW 2: Story information
+        const row2 = document.createElement('tr');
+        row2.classList.add('story-row');
+        if (isPast) row2.classList.add('past-date');
+        
+        row2.innerHTML = `
+            <!-- Country & Site cells are merged from above -->
+            <td class="story-label">Story:</td>
+            <td colspan="2" class="story-title-cell">Loading...</td>
+            <!-- Photo cell is merged from above -->
+            <td></td> <!-- Empty under text code -->
+            <td class="pub-status-cell">Pub Status: ?</td>
+            <!-- Actions cell is merged from above -->
+        `;
+        tbody.appendChild(row2);
+        
+        // Load story data for both rows
+        loadStoryData(row1, row2, day.text_code);
     });
 }
+
     
     // Create holiday dropdown HTML
     function getHolidayOptions(selected = '') {
