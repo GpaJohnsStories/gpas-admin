@@ -17,21 +17,32 @@
     <title>Special Days</title>
     
     <style>
+        /* Make the two rows act as one unit */
+#special-days-table tbody tr {
+    border-bottom: none;
+}
 
-        
+/* Remove padding between paired rows */
+#special-days-table tbody tr:nth-child(odd) td {
+    padding-bottom: 1px;
+}
+
+#special-days-table tbody tr:nth-child(even) td {
+    padding-top: 1px;
+}
+
+/* Style the buttons to stack nicely */
+.action-buttons button {
+    display: block;
+    margin: 2px auto;
+}
         /* Reduce header padding */
         #special-days-table th {
             padding: 4px 8px;
             background-color: #4a90e2;
             color: white;
         }
-        
-        /* Tighten row spacing */
-        #special-days-table td {
-            padding: 2px 8px;
-            vertical-align: middle;
-        }
-        
+               
         /* Control photo size */
         #special-days-table img {
             max-height: 40px;
@@ -126,12 +137,7 @@
             font-family: monospace;
         }
         
-        /* Button styles */
-        .action-buttons {
-            display: flex;
-            gap: 5px;
-        }
-        
+        /* Button styles */      
         .btn {
             padding: 5px 15px;
             border: none;
@@ -259,16 +265,6 @@ tr.story-row {
     border-bottom: 3px solid #4a90e2;
 }
 
-/* Tighten spacing in all table cells */
-td {
-    padding: 4px 10px;  /* 4px top/bottom, 10px left/right */
-}
-
-/* Even tighter for cells touching the blue line */
-tr:not(.story-row) td {
-    padding-bottom: 2px;  /* Less space BEFORE blue line */
-}
-
 tr.story-row td {
     padding-top: 2px;  /* Less space AFTER blue line */
 }
@@ -334,7 +330,7 @@ tr.past-date:hover {
         </select>
     </div>
     
-    <table id="specialDaysTable">
+    <table id="special-days-table">
  <thead>
     <tr>
         <th onclick="sortTable(0)">Country <span class="sort-indicator">↕</span></th>
@@ -455,7 +451,7 @@ function displaySpecialDays() {
             <td class="bold">${day.text_code}</td>
             <td class="category-cell">Loading...</td>
             <td rowspan="2" class="action-buttons" style="vertical-align: middle;">
-                <button class="btn btn-edit" onclick="editRow('${day.id}')" title="Edit">✏️</button><br><br>
+                <button class="btn btn-edit" onclick="editRow('${day.id}')" title="Edit">✏️</button>
                 <button class="btn btn-delete" onclick="deleteRow('${day.id}')" title="Delete">🗑️</button>
             </td>
         `;
