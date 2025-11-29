@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GpasFaith Color Reference</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; margin: 0; }
+        h1 { color: #3D2817; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        th { 
+            background: #3D2817; 
+            color: white; 
+            padding: 12px; 
+            text-align: center; 
+            font-weight: normal; 
+            position: relative;
+        }
+        th.sortable { 
+            cursor: pointer; 
+            user-select: none;
+        }
+        th.sortable:hover { background: #4D3827; }
+        .sort-arrow {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.5;
+        }
+        .sort-arrow.active { opacity: 1; }
+        td { border: 1px solid #ddd; padding: 12px; vertical-align: top; }
+        .swatch { width: 55px; height: 55px; border: 1px solid #999; margin: 0 auto; display: block; }
+        .color-name { font-weight: bold; }
+        .hex-code { font-family: monospace; color: #666; }
+        ul { margin: 0; padding-left: 20px; }
+        li { margin-bottom: 4px; }
+    </style>
+</head>
+<body>
+    <h1>GpasFaith Color Palette</h1>
+    <table id="colorTable">
+        <thead>
+            <tr>
+                <th>Color Swatch</th>
+                <th class="sortable" data-column="1" onclick="sortTable(1)">
+                    Color Name
+                    <span class="sort-arrow" id="arrow-1">▼</span>
+                </th>
+                <th>Hex Code</th>
+                <th class="sortable" data-column="3" onclick="sortTable(3)">
+                    Grouping
+                    <span class="sort-arrow" id="arrow-3">▼</span>
+                </th>
+                <th>How Used</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+
+                      <tr>
+                <td><div class="swatch" style="background-color: #FF9D2A;"></div></td>
+                <td class="color-name">Amber - Golden Flame</td>
+                <td class="hex-code">#FF9D2A</td>
+                <td>Accent</td>
+                <td>
+                    <ul>
+                        <li>Prayer buttons</li>
+                        <li>Donation links</li>
+                        <li>Active states</li>
+                    </ul>
+                </td>
+                <td>Fire's heart. Draws attention without overwhelming, warm and inviting.</td>
+            </tr>
+
+ 
+ 
+          <tr>
+    <td><div class="swatch" style="background-color: #bfdbfe;"></div></td>
+    <td class="color-name">Blue - Light Border</td>
+    <td class="hex-code">#bfdbfe</td>
+    <td>Accent</td>
+    <td>
+        <ul>
+            <li>Border</li>
+            <li>Informational Elements</li>
+        </ul>
+    </td>
+    <td>Light blue for informational sections. Calm and approachable.</td>
+</tr>
+
+<tr>
+    <td><div class="swatch" style="background-color: #60a5fa;"></div></td>
+    <td class="color-name">Blue - Light Guide</td>
+    <td class="hex-code">#60a5fa</td>
+    <td>Accent</td>
+    <td>
+        <ul>
+            <li>Links</li>
+            <li>Navigation hints</li>
+            <li>Interactive elements</li>
+        </ul>
+    </td>
+    <td>Sky blue for guidance and wayfinding.</td>
+</tr>
+            
+            <tr>
+                <td><div class="swatch" style="background-color: #F5E6D3;"></div></td>
+                <td class="color-name">Cream - Soft Parchment</td>
+                <td class="hex-code">#F5E6D3</td>
+                <td>Primary</td>
+                <td>
+                    <ul>
+                        <li>Main background</li>
+                        <li>Content areas</li>
+                        <li>Card backgrounds</li>
+                    </ul>
+                </td>
+                <td>Circular rug tone. Primary background, gentle on eyes for reading.</td>
+            </tr>
+            <tr>
+                <td><div class="swatch" style="background-color: #2C1810;"></div></td>
+                <td class="color-name">Brown - Charcoal, Shadow</td>
+                <td class="hex-code">#2C1810</td>
+                <td>Primary</td>
+                <td>
+                    <ul>
+                        <li>Main body text</li>
+                        <li>Headlines</li>
+                        <li>Bible verses</li>
+                    </ul>
+                </td>
+                <td>Deep corner shadows. High contrast for accessibility.</td>
+            </tr>
+           <tr>
+                <td><div class="swatch" style="background-color: #3D2817;"></div></td>
+                <td class="color-name">Brown - Deep Walnut</td>
+                <td class="hex-code">#3D2817</td>
+                <td>Primary</td>
+                <td>
+                    <ul>
+                        <li>Navigation bar</li>
+                        <li>Footer background</li>
+                        <li>Section headers</li>
+                    </ul>
+                </td>
+                <td>From ceiling beams. Strong, grounding color for main structural elements.</td>
+            </tr>
+
+            <tr>
+    <td><div class="swatch" style="background-color: #A0522D;"></div></td>
+    <td class="color-name">Brown - Light</td>
+    <td class="hex-code">#A0522D</td>
+    <td>Secondary</td>
+    <td>
+        <ul>
+            <li>Warm backgrounds</li>
+            <li>Quote boxes</li>
+            <li>Sidebar areas</li>
+        </ul>
+    </td>
+    <td>Sienna tone. Lighter wood feel for contrast.</td>
+</tr>
+
+<tr>
+    <td><div class="swatch" style="background-color: #8B4513;"></div></td>
+    <td class="color-name">Brown - Medium</td>
+    <td class="hex-code">#8B4513</td>
+    <td>Secondary</td>
+    <td>
+        <ul>
+            <li>Alternate headers</li>
+            <li>Section dividers</li>
+            <li>Frame effects</li>
+        </ul>
+    </td>
+    <td>Saddle brown. Warmer than Deep Walnut for variety.</td>
+</tr>
+
+            <tr>
+                <td><div class="swatch" style="background-color: #FFE4B5;"></div></td>
+                <td class="color-name">Glow - Candlelight</td>
+                <td class="hex-code">#FFE4B5</td>
+                <td>Secondary</td>
+                <td>
+                    <ul>
+                        <li>Hover effects</li>
+                        <li>Selected items</li>
+                        <li>Quote boxes</li>
+                    </ul>
+                </td>
+                <td>Soft wall illumination. Gentle highlight without jarring transitions.</td>
+            </tr>
+
+<tr>
+    <td><div class="swatch" style="background-color: #D4AF37;"></div></td>
+    <td class="color-name">Gold - Sacred Light</td>
+    <td class="hex-code">#D4AF37</td>
+    <td>Liturgical</td>
+    <td>
+        <ul>
+            <li>Easter content</li>
+            <li>Celebration headers</li>
+            <li>Joy/triumph themes</li>
+        </ul>
+    </td>
+    <td>Glory and celebration. Pairs beautifully with your existing amber tones.</td>
+</tr>
+
+<tr>
+    <td><div class="swatch" style="background-color: #228B22;"></div></td>
+    <td class="color-name">Green - Forest</td>
+    <td class="hex-code">#228B22</td>
+    <td>Liturgical</td>
+    <td>
+        <ul>
+            <li>Success Messages</li>
+            <li>Positive Actions</li>
+            <li>Border</li>
+        </ul>
+    </td>
+    <td>Success states and positive actions. Forest green for safety and security themes.</td>
+</tr>
+
+<tr>
+    <td><div class="swatch" style="background-color: #4A7C59;"></div></td>
+    <td class="color-name">Green - Living Hope</td>
+    <td class="hex-code">#4A7C59</td>
+    <td>Liturgical</td>
+    <td>
+        <ul>
+            <li>Ordinary Time content</li>
+            <li>Growth themes</li>
+            <li>Daily devotions</li>
+        </ul>
+    </td>
+    <td>Muted forest green. Life and renewal, easy on senior eyes.</td>
+</tr>
+
+
+<tr>
+    <td><div class="swatch" style="background-color: #6366f1;"></div></td>
+    <td class="color-name">Purple - Indigo</td>
+    <td class="hex-code">#6366f1</td>
+    <td>Liturgical</td>
+    <td>
+        <ul>
+            <li>Special prayers</li>
+            <li>Meditation sections</li>
+            <li>Royal themes</li>
+        </ul>
+    </td>
+    <td>Richer purple for when you need more vibrancy.</td>
+</tr>
+<tr>
+    <td><div class="swatch" style="background-color: #e9d5ff;"></div></td>
+    <td class="color-name">Purple - Light Background</td>
+    <td class="hex-code">#e9d5ff</td>
+    <td>Liturgical</td>
+    <td>
+        <ul>
+            <li>Lent backgrounds</li>
+            <li>Prayer cards</li>
+            <li>Gentle highlights</li>
+        </ul>
+    </td>
+    <td>Soft lavender for backgrounds during penitential seasons.</td>
+</tr>
+
+<tr>
+    <td><div class="swatch" style="background-color: #6B5B95;"></div></td>
+    <td class="color-name">Purple - Warm Advent</td>
+    <td class="hex-code">#6B5B95</td>
+    <td>Liturgical</td>
+    <td>
+        <ul>
+            <li>Advent/Lent sections</li>
+            <li>Prayer headers</li>
+            <li>Reflection areas</li>
+        </ul>
+    </td>
+    <td>Warmer purple for aging eyes. Preparation and humility without harsh blues.</td>
+</tr>
+            <tr>
+                <td><div class="swatch" style="background-color: #CC3333;"></div></td>
+                <td class="color-name">Red - Bandana Crimson</td>
+                <td class="hex-code">#CC3333</td>
+                <td>Accent</td>
+                <td>
+                    <ul>
+                        <li>Christmas themes</li>
+                        <li>Important alerts</li>
+                        <li>Special notices</li>
+                    </ul>
+                </td>
+                <td>Dog's bandana. Use sparingly for emphasis or seasonal content.</td>
+            </tr>
+
+<tr>
+    <td><div class="swatch" style="background-color: #DC143C;"></div></td>
+    <td class="color-name">Red - Sacred Word</td>
+    <td class="hex-code">#DC143C</td>
+    <td>Liturgical</td>
+    <td>
+        <ul>
+            <li>Jesus' words only</li>
+            <li>Direct quotes</li>
+            <li>Gospel text</li>
+        </ul>
+    </td>
+    <td>Deep crimson reserved exclusively for Christ's spoken words.</td>
+</tr>
+  <tr>
+                <td><div class="swatch" style="background-color: #8B7969;"></div></td>
+                <td class="color-name">Stone - Warm Gray</td>
+                <td class="hex-code">#8B7969</td>
+                <td>Secondary</td>
+                <td>
+                    <ul>
+                        <li>Secondary text</li>
+                        <li>Borders</li>
+                        <li>Divider lines</li>
+                    </ul>
+                </td>
+                <td>Fireplace stones. Softer than black text, maintains readability.</td>
+            </tr>
+
+
+        </tbody>
+    </table>
+
+<script>
+    let sortDirection = {};
+
+    function sortTable(columnIndex) {
+        const table = document.getElementById('colorTable');
+        const tbody = table.querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        
+        // Toggle sort direction
+        if (!sortDirection[columnIndex] || sortDirection[columnIndex] === 'desc') {
+            sortDirection[columnIndex] = 'asc';
+        } else {
+            sortDirection[columnIndex] = 'desc';
+        }
+        
+        // Update arrows
+        document.querySelectorAll('.sort-arrow').forEach(arrow => {
+            arrow.classList.remove('active');
+            arrow.textContent = '▼';
+        });
+        
+        const currentArrow = document.getElementById(`arrow-${columnIndex}`);
+        currentArrow.classList.add('active');
+        currentArrow.textContent = sortDirection[columnIndex] === 'asc' ? '▲' : '▼';
+        
+        // Sort rows
+        rows.sort((a, b) => {
+            const aText = a.children[columnIndex].textContent.trim();
+            const bText = b.children[columnIndex].textContent.trim();
+            
+            if (sortDirection[columnIndex] === 'asc') {
+                return aText.localeCompare(bText);
+            } else {
+                return bText.localeCompare(aText);
+            }
+        });
+        
+        // Reattach sorted rows
+        rows.forEach(row => tbody.appendChild(row));
+    }
+</script>
+</body>
+</html>
+
+        
