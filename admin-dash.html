@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Lexend, sans-serif;
+      background: #f9f9f9;
+    }
+
+    /* iframe for menu */
+    .menu-frame {
+      width: 100%;
+      height: 68px; /* match your ribbon height */
+      border: none;
+    }
+
+    /* dashboard body below menu */
+    .dashboard {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 20px auto;
+    }
+  </style>
+</head>
+<body>
+  <!-- Top border: admin-menu.html -->
+  <iframe src="admin-menu.html" class="menu-frame"></iframe>
+
+  <!-- Dashboard body -->
+  <div class="dashboard">
+    <h2>Visits</h2>
+    <!-- chart/table will go here -->
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</body>
+</html>
