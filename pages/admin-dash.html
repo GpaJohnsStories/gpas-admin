@@ -17,14 +17,6 @@
       width: 100%;
     }
 
-    /* Site dropdown */
-    .site-selector {
-      margin-left:17px; /* align with menu bar */
-      margin-top: 0;
-      margin-bottom: 0;
-      margin-right: 5px; 
-    }
-
     .title-row {
   display: flex;
   align-items: center;
@@ -107,8 +99,8 @@
 </head>
 <body>
   <!-- Admin menu include -->
-<iframe src="admin-menu.html" style="width:100%; height:68px; border:none; display:block;"></iframe>
-
+<iframe src="admin-menu.html" style="margin-bottom:20px"; width:100%; height:68px; border:none; display:block;"></iframe>
+<script> // Always load the newest admin-menu.html document.getElementById("adminMenuFrame").src = "admin-menu.html?v=" + Date.now(); </script>
   <!-- yellow title box -->
     <!-- New text box for table title -->
     <div class="visit-title">Site Visit Counts</div>
@@ -162,3 +154,4 @@
 
 </body>
 </html>
+
