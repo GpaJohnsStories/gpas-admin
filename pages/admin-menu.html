@@ -12,22 +12,22 @@
       font-family: Lexend, sans-serif;
     }
 
-    /* Ribbon container: 18 menu columns × 1 row, each cell 70px wide × 68px tall */
+    /* Ribbon container: 17 menu columns × 1 row, each cell 65px wide × 65px tall */
     .menu {
       display: grid;
-      grid-template-columns: 100px repeat(16, 70px); /* cols 1: 100px, cols 2-17: 70px */
-      grid-template-rows: 80px;
+      grid-template-columns: 100px repeat(16, 65px); /* cols 1: 100px, cols 2-17: 65px */
+      grid-template-rows: 65px;
       width: 1200px;              /* screen showing @ 150% */
-      height: 80px;
+      height: 65px;
       margin: 0 auto;
       background: #2665ec;
     }
 
-    /* Buttons: 65×65, round button shape, centered inside 80x80 cell */
+    /* Buttons: 60×69, round button shape, centered inside 65px x 65px cell */
     .menu a {
-      width: 65px;
-      height: 65px;
-      margin: 10px auto;           /* (68 - 58) / 2 = 5px top/bottom */
+      width: 60px;
+      height: 60px;
+      margin: 5px auto;           /* (68 - 58) / 2 = 5px top/bottom */
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -56,14 +56,14 @@
 
     /* Site dropdown styling */
     #siteDropdown {
-      width: 75px;
-      height: 75px;
+      width: 65px;
+      height: 65px;
       font-size: 14px;
       font-weight: 700;
       text-transform: uppercase;
       border: none;
       border-radius: 29px;
-      padding: 0 10px;
+      padding: 0 5px;
       box-shadow: 3px 3px 6px rgba(0,0,0,0.4);
       background: #DC143C;
       color: #FFD700;
@@ -186,6 +186,7 @@
     }
   });
 </script>
+
 
 
 
