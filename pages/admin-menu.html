@@ -103,12 +103,16 @@
     <a href="https://gpaskids.com/buddys_admin" target="_blank" style="background:#8b0000;">Sys<br>Tasks</a>
 
     <!-- Column 10: Website Drop Down Box -->
-    <select id="siteDropdown">
-      <option value="" selected>SITE?</option>
-      <option value="KIDS" style="background:#f97316; color:#ffffff;">KIDS</option>
-      <option value="FAITH" style="background:#228b22; color:#ffffff;">FAITH</option>
-      <option value="SHOP" style="background:#a0522d; color:#ffffff;">SHOP</option>
-    </select>
+<select id="siteDropdown">
+  <option value="" selected>SITE?</option>
+
+  <!-- value = SITE|REPO -->
+  <option value="KIDS|GpasKids" style="background:#f97316; color:#ffffff;">KIDS</option>
+  <option value="FAITH|GpasFaith" style="background:#228b22; color:#ffffff;">FAITH</option>
+  <option value="SHOP|GpasShop" style="background:#a0522d; color:#ffffff;">SHOP</option>
+  <option value="ADMIN|GpasAdmin" style="background:#dc2626; color:#ffffff;">ADMIN</option>
+</select>
+
       
     <!-- Column 11: Kid's Home -->
     <a href="https://gpaskids.com/" target="_blank" style="background:#f97316; color:#ffffff;">
@@ -150,75 +154,57 @@
 
 <script>
   const dropdown = document.getElementById('siteDropdown');
-  
+
   // Load saved selection when page loads
-  const saved = localStorage.getItem('selectedSite');
-  if (saved) {
-    dropdown.value = saved;
-    // Update colors based on saved value
-    switch(saved) {
-      case 'KIDS': dropdown.style.background = '#f97316'; dropdown.style.color = '#ffffff'; break;
-      case 'FAITH': dropdown.style.background = '#228b22'; dropdown.style.color = '#ffffff'; break;
-      case 'SHOP': dropdown.style.background = '#a0522d'; dropdown.style.color = '#ffffff'; break;
+  const savedSite = sessionStorage.getItem('selectedSite');
+  const savedRepo = sessionStorage.getItem('selectedRepo');
+
+  if (savedSite && savedRepo) {
+    dropdown.value = `${savedSite}|${savedRepo}`;
+
+    // Update colors
+    switch(savedSite) {
+      case 'KIDS':  dropdown.style.background = '#f97316'; break;
+      case 'FAITH': dropdown.style.background = '#228b22'; break;
+      case 'SHOP':  dropdown.style.background = '#a0522d'; break;
+      case 'ADMIN':  dropdown.style.background = '#dc2626'; break;
     }
+    dropdown.style.color = '#ffffff';
   }
-  
+
   // Save selection when changed
   dropdown.addEventListener('change', function() {
-    const site = this.value;
-    if (!site) {
+    const value = this.value;
+
+    if (!value) {
       dropdown.style.background = '#DC143C';
       dropdown.style.color = '#FFD700';
       return;
     }
+
+    // Split "KIDS|GpasKids"
+    const [site, repo] = value.split('|');
+
+    // Update colors
     switch(site) {
-      case 'KIDS': dropdown.style.background = '#f97316'; break;
+      case 'KIDS':  dropdown.style.background = '#f97316'; break;
       case 'FAITH': dropdown.style.background = '#228b22'; break;
-      case 'SHOP': dropdown.style.background = '#a0522d'; break;
+      case 'SHOP':  dropdown.style.background = '#a0522d'; break;
+      case 'ADMIN':  dropdown.style.background = '#dc2626'; break;
     }
     dropdown.style.color = '#ffffff';
-    
-    // Save to localStorage
-    localStorage.setItem('selectedSite', site);
-    
-    // Tell parent window if we're in an iframe
+
+    // Save to sessionStorage
+    sessionStorage.setItem('selectedSite', site);
+    sessionStorage.setItem('selectedRepo', repo);
+
+    // Notify parent window if inside iframe
     if (window.parent !== window) {
       window.parent.selectedSite = site;
+      window.parent.selectedRepo = repo;
     }
   });
 
-function openFunIdeas() {
-  window.open( 'https://gpajohnsstories.github.io/gpasAdmin/pages/fun-ideas-stuff.html', 'funIdeas', 'width=500,height=380,resizable=no' ); 
-}
+  }
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
