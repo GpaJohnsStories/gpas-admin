@@ -105,51 +105,61 @@
 
 
 <script>
-  const VALID_USER = "GpaJohn&Buddy";   // your hardcoded username
+const VALID_USER = "GpaJohn&Buddy";   // exact match, case-sensitive
+const EXPECTED_GITHUB_LOGIN = "GpaJohnsStories";  // used only for comparison
 
-  async function attemptLogin() {
-    const user = document.getElementById("userInput").value.trim();
-    const token = document.getElementById("tokenInput").value.trim();
+async function attemptLogin() {
+  const user = document.getElementById("userInput").value.trim();
+  const token = document.getElementById("tokenInput").value.trim();
 
-    if (!user || !token) {
-      alert("Both fields are required.");
-      return;
-    }
+  if (!user || !token) {
+    alert("Both fields are required.");
+    return;
+  }
 
-    if (user !== VALID_USER) {
-      alert("User ID not recognized.");
-      return;
-    }
+  if (user !== VALID_USER) {
+    alert("User ID not recognized.");
+    return;
+  }
 
-    // Validate GitHub token
-    try {
-      const response = await fetch("https://api.github.com/user", {
-        headers: {
-          Authorization: `token ${token}`,
-          "User-Agent": "gpajohnsstories"
-        }
-      });
-
-      if (!response.ok) {
-        alert("GitHub rejected the token. Try again.");
-        return;
+  try {
+    const response = await fetch("https://api.github.com/user", {
+      headers: {
+        Authorization: `token ${token}`,
+        "User-Agent": "GpaAdminTool",
+        Accept: "application/vnd.github.v3+json"
       }
+    });
 
-      // Store token for this session
-      sessionStorage.setItem("githubToken", token);
-
-      // Show success message and dashboard button
-      document.getElementById("successBox").style.display = "block";
-      document.getElementById("goButton").style.display = "inline-block";
-
-    } catch (err) {
-      alert("Network error validating token.");
+    if (!response.ok) {
+      alert("GitHub rejected the token. Try again.");
+      return;
     }
-  }
 
-  function goToDashboard() {
-    window.location.href = "admin-dash.html";
+    const data = await response.json();
+
+    // Validate GitHub username
+    if (data.login !== EXPECTED_GITHUB_LOGIN) {
+      alert("This token does not belong to the correct GitHub account.");
+      return;
+    }
+
+    // Store token
+    sessionStorage.setItem("githubToken", token);
+
+    // Success UI
+    document.getElementById("successBox").style.display = "block";
+    document.getElementById("goButton").style.display = "inline-block";
+
+  } catch (err) {
+    alert("Network error validating token.");
   }
+}
+
+function goToDashboard() {
+  window.location.href = "admin-dash.html";
+}
+
 </script>
 
 </body>
