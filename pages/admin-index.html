@@ -1,1 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Grandpa John's Admin Login</title>
+
+<style>
+  body {
+    font-family: Lexend, sans-serif;
+    background: #fdfdf4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+  }
+
+  #container {
+    margin-top: 40px;
+    background: white;
+    padding: 30px;
+    border-radius: 14px;
+    width: 420px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    text-align: center;
+  }
+
+  #icons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  #icons img {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+
+  input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+
+  button {
+    margin-top: 18px;
+    padding: 12px 20px;
+    font-size: 17px;
+    cursor: pointer;
+    border-radius: 6px;
+    border: none;
+    background: #2d6cdf;
+    color: white;
+  }
+
+  #successBox {
+    margin-top: 20px;
+    padding: 15px;
+    background: #e8f7e8;
+    border: 1px solid #8ac78a;
+    border-radius: 8px;
+    display: none;
+  }
+
+  #goButton {
+    margin-top: 15px;
+    display: none;
+  }
+</style>
+
+</head>
+<body>
+
+<div id="container">
+
+  <div id="icons">
+    <img src="/icons/admin-favicon.jpg" alt="Admin">
+    <img src="/icons/kids-favicon.png" alt="Kids">
+    <img src="/icons/faith-favicon.png" alt="Faith">
+    <img src="/icons/shop-favicon.png" alt="Shop">
+  </div>
+
+  <h2>Grandpa John's Admin Login</h2>
+
+  <input id="userInput" type="text" placeholder="User ID">
+  <input id="tokenInput" type="password" placeholder="GitHub Token">
+
+  <button onclick="attemptLogin()">Log In</button>
+
+  <div id="successBox">
+    <strong>Success!</strong><br>
+    Your admin session is ready.
+  </div>
+
+  <button id="goButton" onclick="goToDashboard()">Go to Admin Dashboard</button>
+
+</div>
+
+
+<script>
+  const VALID_USER = "John";   // your hardcoded username
+
+  async function attemptLogin() {
+    const user = document.getElementById("userInput").value.trim();
+    const token = document.getElementById("tokenInput").value.trim();
+
+    if (!user || !token) {
+      alert("Both fields are required.");
+      return;
+    }
+
+    if (user !== VALID_USER) {
+      alert("User ID not recognized.");
+      return;
+    }
+
+    // Validate GitHub token
+    try {
+      const response = await fetch("https://api.github.com/user", {
+        headers: {
+          Authorization: `token ${token}`,
+          "User-Agent": "gpajohnsstories"
+        }
+      });
+
+      if (!response.ok) {
+        alert("GitHub rejected the token. Try again.");
+        return;
+      }
+
+      // Store token for this session
+      sessionStorage.setItem("githubToken", token);
+
+      // Show success message and dashboard button
+      document.getElementById("successBox").style.display = "block";
+      document.getElementById("goButton").style.display = "inline-block";
+
+    } catch (err) {
+      alert("Network error validating token.");
+    }
+  }
+
+  function goToDashboard() {
+    window.location.href = "admin-dash.html";
+  }
+</script>
+
+</body>
+</html>
 
