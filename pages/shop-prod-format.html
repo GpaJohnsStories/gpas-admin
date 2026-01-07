@@ -140,17 +140,29 @@
 </head>
 
 <body>
-<!-- 
+  <!-- 
     ADMIN MENU PLACEHOLDER 
     -----------------------
     You will manually include the admin menu HTML here.
     This keeps your admin UI consistent across all tools.
   -->
   <div id="admin-header"></div>
-    <!-- Insert contents of ../gpas-admin/pages/admin-menu.html here -->
+
+  <script>
+    // Load the admin menu into the header
+    console.log("Loading admin menu…");
+    fetch('admin-menu.html')
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('admin-header').innerHTML = html;
+      })
+      .catch(err => {
+        console.error('Failed to load admin menu:', err);
+      });
+  </script>
 
   <!-- PAGE TITLE -->
-  <h2 style="text-align:center;">GPAS Shop Product Formatter -- 01/07 - 1</h2>
+  <h2 style="text-align:center;">GPAS Shop Product Formatter -- 01/07 - 2</h2>
 
   <!-- 
     MAIN 3-COLUMN TABLE 
@@ -287,20 +299,7 @@
   <!-- ============================================================= -->
   <!-- JAVASCRIPT SECTION                                            -->
   <!-- ============================================================= -->
-  <script>
-
 <script>
-  // Load the admin menu into the header
-	console.log("Loading admin menu…");
-  fetch('admin-menu.html')
-    .then(response => response.text())
-    .then(html => {
-      document.getElementById('admin-header').innerHTML = html;
-    })
-    .catch(err => {
-      console.error('Failed to load admin menu:', err);
-    });
-
 /* --------------------------------------------------------------
    DESCRIPTION CHARACTER COUNTER
 -------------------------------------------------------------- */
@@ -636,6 +635,7 @@ async function saveProductFile() {
 
 </body>
 </html>
+
 
 
 
