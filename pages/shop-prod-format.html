@@ -162,7 +162,7 @@
   </script>
 
   <!-- PAGE TITLE -->
-  <h2 style="text-align:center;">GPAS Shop Product Formatter -- 01/10 - 1</h2>
+  <h2 style="text-align:center;">GPAS Shop Product Formatter -- 01/10 - 2</h2>
 
   <!-- 
     MAIN 3-COLUMN TABLE 
@@ -181,23 +181,24 @@
 
   <!-- TOP CONTROL BUTTONS -->
 <div class="inline-buttons" style="margin-top:20px;">
-  <button id="saveBtn" style="background-color:#228B22; color:white;">width:160px;
+  <button id="saveBtn" style="background-color:#228B22; color:white;width:160px;">
 	  SAVE LISTING</button>
-  <button id="saveClearBtn" style="background-color:#cc0000; color:white;">width:160px;
+  <button id="saveClearBtn" style="background-color:#cc0000; color:white;width:160px;">
 	  <strong>SAVE & CLEAR</strong></button>
 </div>
 
 	<div style="margin-bottom:20px;">
-    <button id="loadBtn">LOAD PRODUCT</button>
-    <button id="clearBtn"><strong>CLEAR FORM</strong></button>
+    <button id="loadBtn" style="background-color:#cc0000; color:white; width:160px;">
+		LOAD PRODUCT</button>
+    <button id="clearBtn" style="background-color:#cc0000; color:white; width:160px;>
+		<strong>CLEAR FORM</strong></button>
   </div>
 
 
 <div style="margin-top:10px;">
-  <button id="deleteBtn" style="background-color:#cc0000; color:white;"><strong>DELETE LISTING</strong></button>
+  <button id="deleteBtn" style="background-color:#cc0000; color:white; width:1160px;">
+	  <strong>DELETE LISTING</strong></button>
 </div>
-
-
 	
   <h3>Build Product Code</h3>
 
@@ -237,7 +238,7 @@
 
        <div>
             <label for="pcode">Product Code:</label><br>
-            <input type="text" id="pcode"
+            <input type="text" id="pcode" placeholder="IP?-nnn"
                  style="width:120px; font-weight:bold;"
                  oninput="validateCode(this)">
        </div>
@@ -342,6 +343,68 @@ function validateCode(input) {
   if (right) result += right;
 
   input.value = result;
+}
+
+	// ===============================================================
+// LOAD PRODUCT FROM GITHUB
+// This function loads an existing product HTML file from the
+// GpasShop GitHub repo using the product code typed by the user.
+// Example: FT1-001 loads /prod/FT1-001.html
+// ===============================================================
+async function loadProduct() {
+
+// ---------------------------------------------------------------
+// 1. Get the product code from the input box
+// ---------------------------------------------------------------
+  const code = document.getElementById("prodCode").value.trim();
+
+  // If nothing was typed, stop and warn the user
+  if (!code) {
+    alert("Enter a product code like FT1-001");
+    return;
+  }
+
+  // ---------------------------------------------------------------
+  // 2. Build the RAW GitHub URL for the product file
+  // NOTE: This MUST use raw.githubusercontent.com
+  // ---------------------------------------------------------------
+  const url = `https://raw.githubusercontent.com/GpaJohnsStories/GpasShop/main/prod/${code}.html`;
+
+  try {
+    // ---------------------------------------------------------------
+    // 3. Fetch the product file from GitHub
+    // ---------------------------------------------------------------
+    const response = await fetch(url);
+
+    // If GitHub returns 404 or any error, notify the user
+    if (!response.ok) {
+      alert(`Product ${code} not found in /prod/`);
+      return;
+    }
+
+    // ---------------------------------------------------------------
+    // 4. Convert the file into text (HTML)
+    // ---------------------------------------------------------------
+    const html = await response.text();
+
+    // ---------------------------------------------------------------
+    // 5. Put the product HTML into the editor box
+    // This allows the user to edit the product
+    // ---------------------------------------------------------------
+    document.getElementById("prodHtml").value = html;
+
+    // ---------------------------------------------------------------
+    // 6. Confirm success
+    // ---------------------------------------------------------------
+    alert(`Loaded product ${code}`);
+
+  } catch (err) {
+    // ---------------------------------------------------------------
+    // 7. If something unexpected happens, show error
+    // ---------------------------------------------------------------
+    alert("Error loading product. Check console.");
+    console.error(err);
+  }
 }
 
 
@@ -638,6 +701,7 @@ async function saveProductFile() {
 
 </body>
 </html>
+
 
 
 
