@@ -162,7 +162,7 @@
   </script>
 
   <!-- PAGE TITLE -->
-  <h2 style="text-align:center;">GPAS Shop Product Formatter -- 01/10 - 13</h2>
+  <h2 style="text-align:center;">GPAS Shop Product Formatter -- 01/10 - 14</h2>
 
   <!-- 
     MAIN 3-COLUMN TABLE 
@@ -594,11 +594,44 @@ function buildPreview() {
 }
 
 
-/* --------------------------------------------------------------
-   SAVE BUTTON HANDLER
--------------------------------------------------------------- */
-const saveBtn = document.getElementById('saveBtn');
-saveBtn.addEventListener('click', saveProductFile);
+/* ===============================================================
+   BUTTON HANDLERS — CLEAN, SINGLE-TRIGGER SETUP
+   All buttons are wired once, in one place.
+================================================================ */
+
+/* SAVE */
+document.getElementById("saveBtn").addEventListener("click", () => {
+  saveProductFile();   // run your save logic
+});
+
+/* SAVE & CLEAR */
+document.getElementById("saveClearBtn").addEventListener("click", () => {
+  saveProductFile();   // save first
+  if (confirm("Clear all fields?")) {
+    clearFormFields();
+  }
+});
+
+/* LOAD */
+document.getElementById("loadBtn").addEventListener("click", () => {
+  loadProduct();       // your load logic
+});
+
+/* CLEAR FORM */
+document.getElementById("clearBtn").addEventListener("click", () => {
+  if (confirm("Clear all fields?")) {
+    clearFormFields();
+  }
+});
+
+/* DELETE */
+document.getElementById("deleteBtn").addEventListener("click", () => {
+  if (confirm("Delete this product file?")) {
+    deleteProductFile();   // your delete logic
+  }
+});
+
+
 
 
 /* ================================================================
@@ -705,6 +738,7 @@ async function saveProductFile() {
 
 </body>
 </html>
+
 
 
 
