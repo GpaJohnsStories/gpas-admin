@@ -162,7 +162,7 @@
   </script>
 
   <!-- PAGE TITLE -->
-  <h2 style="text-align:center;">GPAS Shop Product Formatter -- 01/10 - 16</h2>
+  <h2 style="text-align:center;">GPAS Shop Product Formatter -- 01/10 - 17</h2>
 
   <!-- 
     MAIN 3-COLUMN TABLE 
@@ -437,6 +437,49 @@ function requireToken() {
   return null;
 }
 
+/* ===============================================================
+   FORMAT LISTING — BUILD finalProductHTML + SHOW PREVIEW
+================================================================ */
+function formatListing() {
+
+  // 1. Ensure product code exists
+  let code = document.getElementById("pcode").value.trim();
+  if (!code) {
+    // Trigger auto-builder if dropdowns are selected
+    buildProductCode();
+    code = document.getElementById("pcode").value.trim();
+  }
+
+  if (!code) {
+    alert("Please select Interest and Product Type so I can build the product code.");
+    return;
+  }
+
+  // 2. Collect all fields
+  const title = document.getElementById("title").value.trim();
+  const author = document.getElementById("author").value.trim();
+  const desc = document.getElementById("desc").value.trim();
+  const imgurl = document.getElementById("imgurl").value.trim();
+  const purl = document.getElementById("purl").value.trim();
+
+  // 3. Build formatted HTML (your product card)
+  const html =
+    `<div class="product-card">
+       <img src="${imgurl}" alt="${title}" class="product-image">
+       <h2 class="product-title">${title}</h2>
+       <h3 class="product-author">${author}</h3>
+       <p class="product-desc">${desc}</p>
+       <a href="${purl}" class="product-link">View Product</a>
+       <div class="product-code">${code}</div>
+     </div>`;
+
+  // 4. Save globally for SAVE button
+  window.finalProductHTML = html;
+
+  // 5. Show preview
+  document.getElementById("previewBox").innerHTML = html;
+}
+
 
 /* ===============================================================
    SAVE PRODUCT FILE TO GITHUB
@@ -561,8 +604,14 @@ document.getElementById("clearBtn").addEventListener("click", () => {
 document.getElementById("deleteBtn").addEventListener("click", () => {
   if (confirm("Delete this product file?")) deleteProductFile();
 });
+
+document.getElementById("formatBtn").addEventListener("click", () => {
+  formatListing();
+});
+	
 </script>
 
 </body>
 </html>
+
 
