@@ -162,7 +162,7 @@
   </script>
 
   <!-- PAGE TITLE -->
-  <h2 style="text-align:center;">GPAS Shop Product Formatter -- 01/15 - 14</h2>
+  <h2 style="text-align:center;">GPAS Shop Product Formatter -- 01/10 - 16</h2>
 
   <!-- 
     MAIN 3-COLUMN TABLE 
@@ -296,7 +296,7 @@
         <h3>Format & Preview</h3>
 
         <!-- FORMAT BUTTON -->
-        <button id="formatBtn"><strong>FORMAT</strong></button><br>
+        <button id="formatBtn"><strong>FORMAT LISTING</strong></button><br>
 
         <!-- PREVIEW BOX -->
         <div id="previewBox">
@@ -313,10 +313,9 @@
   <!-- JAVASCRIPT SECTION                                            -->
   <!-- ============================================================= -->
 <script>
-<script>
-/* --------------------------------------------------------------
+/* ===============================================================
    DESCRIPTION CHARACTER COUNTER
--------------------------------------------------------------- */
+================================================================ */
 const desc = document.getElementById('desc');
 const descCounter = document.getElementById('descCounter');
 
@@ -325,9 +324,57 @@ desc.addEventListener('input', () => {
 });
 
 
-/* --------------------------------------------------------------
-   PRODUCT CODE VALIDATION
--------------------------------------------------------------- */
+/* ===============================================================
+   BUILD PRODUCT CODE (PREFIX + AUTO-INCREMENT SUFFIX)
+================================================================ */
+async function buildProductCode() {
+  const interest = document.getElementById("interest").value.toUpperCase();
+  const ptype    = document.getElementById("ptype").value.toUpperCase();
+
+  if (!interest || !ptype) return;
+
+  const prefix = interest + ptype + "1";
+
+  const apiUrl = "https://api.github.com/repos/GpaJohnsStories/GpasShop/contents/prod";
+
+  let nextSuffix = "001";
+
+  try {
+    const response = await fetch(apiUrl);
+    if (response.ok) {
+      const files = await response.json();
+
+      const regex = new RegExp("^" + prefix + "-(\\d{3})\\.html$", "i");
+
+      let max = 0;
+
+      for (const item of files) {
+        if (!item || !item.name) continue;
+
+        const match = item.name.match(regex);
+        if (match && match[1]) {
+          const num = parseInt(match[1], 10);
+          if (num > max) max = num;
+        }
+      }
+
+      nextSuffix = String(max + 1).padStart(3, "0");
+    }
+  } catch (err) {
+    console.error("Error fetching suffix:", err);
+  }
+
+  const finalCode = prefix + "-" + nextSuffix;
+  document.getElementById("pcode").value = finalCode;
+}
+
+document.getElementById("interest").addEventListener("change", buildProductCode);
+document.getElementById("ptype").addEventListener("change", buildProductCode);
+
+
+/* ===============================================================
+   PRODUCT CODE VALIDATION (manual typing safety)
+================================================================ */
 function validateCode(input) {
   let v = input.value.toUpperCase();
   v = v.replace(/[^A-Z0-9\-]/g, "");
@@ -353,8 +400,7 @@ function validateCode(input) {
    LOAD PRODUCT FROM GITHUB
 ================================================================ */
 async function loadProduct() {
-
-  const code = document.getElementById("pcode").value.trim();  // FIXED
+  const code = document.getElementById("pcode").value.trim();
 
   if (!code) {
     alert("Enter a product code like FT1-001");
@@ -397,7 +443,7 @@ function requireToken() {
 ================================================================ */
 async function saveProductFile() {
 
-  console.log("saveProductFile fired");  // DEBUG LINE
+  console.log("saveProductFile fired");
 
   if (!window.finalProductHTML) {
     alert("Please click FORMAT before saving.");
@@ -406,7 +452,7 @@ async function saveProductFile() {
 
   const code = document.getElementById('pcode').value.trim();
   if (!/^[A-Z0-9]{3}-\d{3}$/.test(code)) {
-    alert("Product code must look like FB1-001.");
+    alert("Product code must look like FT1-001.");
     return;
   }
 
@@ -471,7 +517,7 @@ async function saveProductFile() {
 
 
 /* ===============================================================
-   CLEAR FORM FIELDS  —  PLACED HERE ON PURPOSE
+   CLEAR FORM FIELDS
 ================================================================ */
 function clearFormFields() {
 
@@ -516,5 +562,7 @@ document.getElementById("deleteBtn").addEventListener("click", () => {
   if (confirm("Delete this product file?")) deleteProductFile();
 });
 </script>
+
 </body>
 </html>
+
