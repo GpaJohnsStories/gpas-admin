@@ -196,7 +196,7 @@
   </script>
 
   <!-- PAGE TITLE -->
-  <h2 style="text-align:center;">GPAS Shop Product Formatter -- 01/12 - A1</h2>
+  <h2 style="text-align:center;">GPAS Shop Product Formatter -- 01/12 - A2</h2>
 
   <!-- 
     MAIN 3-COLUMN TABLE 
@@ -579,7 +579,8 @@ function detectStoreName(url) {
     alert("ERROR: Product URL is required.");
     return;
   }
-
+  const storeName = detectStoreName(purl);
+  
   // ---------------------------------------------------------------
   // 1) Grab remaining OPTIONAL field values
   // ---------------------------------------------------------------
@@ -591,8 +592,7 @@ function detectStoreName(url) {
 
   // title, imgurl, purl are already available and valid
   // ... continue building HTML ...
-}
-
+    
 // 2) Build cost HTML (hide if blank or zero)
 let costHTML = "";
 if (cost && !isNaN(cost) && Number(cost) > 0) {
