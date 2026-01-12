@@ -200,7 +200,7 @@
   </script>
 
   <!-- PAGE TITLE -->
-  <h2 style="text-align:center;">GPAS Shop Product Formatter -- 01/11 - B1</h2>
+  <h2 style="text-align:center;">GPAS Shop Product Formatter -- 01/11 - C1</h2>
 
   <!-- 
     MAIN 3-COLUMN TABLE 
@@ -275,7 +275,7 @@
 
 <!-- Site Code, position 3 of Product Code -->        
   <label for="site">Site Family:</label>
-    <select id="site">
+    <select id="site" style="width:150px;">
       <option value="4">GpasKids</option>
       <option value="1">GpasFaith</option>
       <option value="9">GpasShop</option>
@@ -292,7 +292,6 @@
       <!-- COLUMN 2 — PRODUCT DETAILS (ends after description)       -->
       <!-- ========================================================= -->
       <td>
-        <h3>Product Details</h3>
 
         <!-- PRODUCT CODE + PRICE ON SAME LINE -->
         <div style="display:flex; gap:40px; align-items:flex-start;">
@@ -304,13 +303,13 @@
               type="text"
               id="pcode"
               placeholder="IP?-nnn"
-              style="width:120px; font-weight:bold;"
+              style="width:150px; font-weight:bold;"
               oninput="validateCode(this)">
           </div>
 
           <!-- PRICE -->
           <div>
-            <label for="cost">Price: (No "$" needed)</label><br>
+            <label for="cost">Price: (No "$")</label><br>
             <input
               type="text"
               id="cost"
@@ -358,9 +357,15 @@
       <!-- COLUMN 3 — FORMAT BUTTON + PREVIEW ONLY                   -->
       <!-- ========================================================= -->
       <td>
-        <h3>Format + Preview</h3>
+        <h3>Format Preview</h3>
 
         <!-- FORMAT BUTTON -->
+        <button id="formatBtn" style="background-color:#cc0000; color:white; width:150px;">
+            <strong>Format LISTING</strong>
+          </button><br>
+        
+        
+        
         <button id="formatBtn" style="margin-bottom:6px;">
           <strong>FORMAT LISTING</strong>
         </button><br>
@@ -532,6 +537,21 @@ async function buildProductCode() {
     return parts.join(", ");
   }
 
+// Post Store Name    
+function detectStoreName(url) {
+  if (!url) return "";
+
+  const u = url.toLowerCase();
+
+  if (u.includes("amazon")) return "Amazon";
+  if (u.includes("zazzle")) return "Zazzle";
+
+  // Future‑proofing: if you ever add a bookstore
+  if (u.includes("book")) return "Book Store";
+
+  return "";
+}
+
 
   /* ===============================================================
      FORMAT LISTING
@@ -550,7 +570,15 @@ async function buildProductCode() {
     const purl    = (document.getElementById("purl").value || "").trim();
     const imgurl  = (document.getElementById("imgurl").value || "").trim();
 
-    // 2) Basic safety checks
+// 2) Build cost HTML (hide if blank or zero)
+let costHTML = "";
+if (cost && !isNaN(cost) && Number(cost) > 0) {
+  const formatted = Number(cost).toFixed(2);
+  costHTML = `<div class="price">$ ${formatted}</div>`;
+}
+
+    
+    // 3) Basic safety checks
     if (!code) {
       alert("Product Code is required before formatting.");
       return;
@@ -560,11 +588,11 @@ async function buildProductCode() {
       return;
     }
 
-    // 3) Normalize price + tags
+    // 4) Normalize price + tags
     const priceDisplay = formatPrice(cost);
     const tagsDisplay  = normalizeTags(tagsRaw);
 
-    // 4) Build card HTML (this is what the shop page will use)
+    // 5) Build card HTML (this is what the shop page will use)
     //    Adjust structure and classes to match your live product wall.
     const cardHTML =
       "<article class='product-card' data-code='" + code + "' data-tags=\"" + escapeHtml(tagsDisplay) + "\">" +
@@ -585,8 +613,11 @@ async function buildProductCode() {
             "<span class='product-price'>" + priceDisplay + "</span>" +
           "</div>" +
           (desc
-            ? "<p class='product-description'>" + escapeHtml(desc) + "</p>"
-            : "") +
+            ? "<p style='font-family:Lexend; font-size:21px; font-weight:normal; line-height:34px; margin:10px 0;'>" 
+            + escapeHtml(desc) + 
+              "</p>"
+            : "")
+
           (purl
             ? "<div class='product-link'><a href='" + encodeURI(purl) + "'>View details</a></div>"
             : "") +
@@ -596,10 +627,10 @@ async function buildProductCode() {
         "</div>" +
       "</article>";
 
-    // 5) Store in global for saving
+    // 6) Store in global for saving
     window.finalProductHTML = cardHTML;
 
-    // 6) Update preview
+    // 7) Update preview
     const preview = document.getElementById("previewBox");
     if (preview) {
       preview.innerHTML = cardHTML;
