@@ -86,6 +86,9 @@
     */
     .inline-buttons {
       display: flex;
+      font-size: 21px;
+      font-weight: bold;
+      font-family: Lexend;
       gap: 10px;
       margin-top: 5px;
       margin-bottom: 4px;
@@ -200,7 +203,7 @@
   </script>
 
   <!-- PAGE TITLE -->
-  <h2 style="text-align:center;">GPAS Shop Product Formatter -- 01/11 - C1</h2>
+  <h2 style="text-align:center;">GPAS Shop Product Formatter -- 01/11 - C2</h2>
 
   <!-- 
     MAIN 3-COLUMN TABLE 
@@ -280,7 +283,7 @@
       <option value="1">GpasFaith</option>
       <option value="9">GpasShop</option>
     </select>
-
+<br>
 
         <!-- TAGS LIVE IN COLUMN 1 (AS YOU REQUESTED) -->
         <label for="tags">Search Tags (comma separated ", "):</label><br>
@@ -302,7 +305,7 @@
             <input
               type="text"
               id="pcode"
-              placeholder="IP?-nnn"
+              placeholder="IPS-nnn"
               style="width:150px; font-weight:bold;"
               oninput="validateCode(this)">
           </div>
@@ -357,19 +360,12 @@
       <!-- COLUMN 3 — FORMAT BUTTON + PREVIEW ONLY                   -->
       <!-- ========================================================= -->
       <td>
-        <h3>Format Preview</h3>
 
         <!-- FORMAT BUTTON -->
-        <button id="formatBtn" style="background-color:#cc0000; color:white; width:150px;">
-            <strong>Format LISTING</strong>
+        <button id="formatBtn" style="background-color:#228B22; color:white; width:150px;">
+            <h3>Format LISTING</h3>
           </button><br>
         
-        
-        
-        <button id="formatBtn" style="margin-bottom:6px;">
-          <strong>FORMAT LISTING</strong>
-        </button><br>
-
         <!-- PREVIEW BOX (SCROLLABLE) -->
         <div id="previewBox">
           <!-- formatted preview will appear here -->
