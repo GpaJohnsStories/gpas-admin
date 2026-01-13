@@ -79,25 +79,47 @@
       margin-bottom: 6px;
     }
 
-    /* 
-      INLINE BUTTON ROWS 
-      -------------------
-      For Save / Load / Clear / Delete in Column 1.
-    */
-    .inline-buttons {
-      display: flex;
-      font-size: 21px;
-      font-weight: bold;
-      font-family: Lexend;
-      gap: 10px;
-      margin-top: 5px;
-      margin-bottom: 4px;
-    }
+/* ADMIN ACTION BUTTONS — 3D PILL STYLE */
+.admin-btn {
+  width: 300px;
+  padding: 12px 0;
+  font-family: Lexend;
+  font-size: 22px;
+  font-weight: bold;
+  color: white;
+
+  border: none;
+  border-radius: 5px;
+
+  background-image: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.25),
+    rgba(0,0,0,0.15)
+  );
+
+  box-shadow:
+    0 4px 0 rgba(0,0,0,0.35),
+    0 6px 10px rgba(0,0,0,0.25);
+
+  cursor: pointer;
+  margin-bottom: 14px;
+
+  transition:
+    transform 0.08s ease,
+    box-shadow 0.08s ease;
+}
+
+.admin-btn:active {
+  transform: translateY(3px);
+  box-shadow:
+    0 1px 0 rgba(0,0,0,0.35),
+    0 3px 6px rgba(0,0,0,0.25);
+}
 
 /* PRODUCT CARD PREVIEW WIDTH CONTROL */
 #previewBox {
-  width: 328px;
-  height: 400px;
+  width: 330px;
+  height: 450px;
   padding: 10px;
   border: 4px solid #ccc;
   box-sizing: border-box;   /* 🔒 THIS IS THE KEY */
@@ -177,7 +199,7 @@
   </script>
 
   <!-- PAGE TITLE -->
-  <h2 style="text-align:center;">GPAS Shop Product Formatter -- 01/13 - B1</h2>
+  <h2 style="text-align:center;">GPAS Shop Product Formatter -- 01/13 - C1</h2>
 
   <!-- 
     MAIN 3-COLUMN TABLE 
@@ -199,9 +221,6 @@
           <button id="saveBtn" style="background-color:#228B22; color:white; width:200px;">
             SAVE LISTING
           </button>
-          <button id="loadBtn" style="background-color:#228B22; color:white; width:200px;">
-            LOAD PRODUCT
-          </button>
         </div>
 
         <div class="inline-buttons">
@@ -210,12 +229,6 @@
           </button>
           <button id="clearBtn" style="background-color:#cc0000; color:white; width:200px;">
             <strong>CLEAR FORM</strong>
-          </button>
-        </div>
-
-        <div class="inline-buttons">
-          <button id="deleteBtn" style="background-color:#cc0000; color:white; width:410px;">
-            <strong>DELETE LISTING</strong>
           </button>
         </div>
 
@@ -338,13 +351,13 @@
 <button id="formatBtn"
         style="background-color:#228B22;
                color:white;
-               width:300px;
+               width:330px;
                font-family:Lexend;
                font-size:24px;
                font-weight:bold;
                padding:6px 0;
                text-align:center;">
-                  Format Listing
+                  Preview Listing
                </button><br>
 
         
@@ -610,7 +623,8 @@ const cardHTML =
   "<article style='width:300px; border:4px solid #999; padding:10px; box-sizing:border-box;'>" +
     "<div style='text-align:center;'>" +
       (imgurl
-        ? "<a href='" + encodeURI(purl || "#") + "'>" +
+        ? "<a href='" + encodeURI(purl || "#") + "' target='_blank' rel='noopener noreferrer'>
+" +
             "<img src='" + encodeURI(imgurl) + "' alt='" + escapeHtml(title) + "' style='width:100%; height:auto; border:0;'>" +
           "</a>"
         : "") +
@@ -639,7 +653,7 @@ const cardHTML =
   : "") +
 (purl
   ? "<div style='margin:14px 0; text-align:center;'>" +
-      "<a href='" + encodeURI(purl) + "' " +
+      "<a href='" + encodeURI(purl) + "' target='_blank' rel='noopener noreferrer' " +
          "style='display:inline-block; " +
                 "padding:10px 22px; " +
                 "font-family:Lexend; " +
@@ -990,34 +1004,31 @@ if (rawPrice && !isNaN(rawPrice) && Number(rawPrice) > 0) {
     window.finalProductHTML = '';
   }
 
+/* ===============================================================
+   BUTTON HANDLERS — CLEAN, SINGLE-TRIGGER SETUP
+================================================================ */
 
-  /* ===============================================================
-     BUTTON HANDLERS — CLEAN, SINGLE-TRIGGER SETUP
-  ================================================================= */
-  document.getElementById("saveBtn").addEventListener("click", () => {
-    saveProductFile();
-  });
+/* SAVE LISTING */
+document.getElementById("saveBtn").addEventListener("click", () => {
+  saveProductFile();
+});
 
-  document.getElementById("loadBtn").addEventListener("click", () => {
-    loadProduct();
-  });
+/* SAVE & CLEAR */
+document.getElementById("saveClearBtn").addEventListener("click", () => {
+  saveProductFile();
+  if (confirm("Clear all fields?")) clearFormFields();
+});
 
-  document.getElementById("saveClearBtn").addEventListener("click", () => {
-    saveProductFile();
-    if (confirm("Clear all fields?")) clearFormFields();
-  });
+/* CLEAR FORM */
+document.getElementById("clearBtn").addEventListener("click", () => {
+  if (confirm("Clear all fields?")) clearFormFields();
+});
 
-  document.getElementById("clearBtn").addEventListener("click", () => {
-    if (confirm("Clear all fields?")) clearFormFields();
-  });
+/* PREVIEW LISTING */
+document.getElementById("formatBtn").addEventListener("click", () => {
+  formatListing();
+});
 
-  document.getElementById("deleteBtn").addEventListener("click", () => {
-    if (confirm("Delete this product file?")) deleteProductFile();
-  });
-
-  document.getElementById("formatBtn").addEventListener("click", () => {
-    formatListing();
-  });
 
   </script>
 
