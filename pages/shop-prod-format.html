@@ -89,7 +89,7 @@
 
 /* PRODUCT CARD PREVIEW WIDTH CONTROL */
 #previewBox {
-  width: 330px;
+  width: 350px;
   height: 380px;
   padding: 10px;
   border: 4px solid #ccc;
@@ -107,7 +107,7 @@
     #descCounter {
       font-size: 16px;
       color: #666;
-      margin-top: -4px;
+      margin-top: -6px;
       margin-bottom: 6px;
     }
 
@@ -188,14 +188,14 @@
       <td>
 
         <!-- CONTROL BUTTONS -->
-<div style="text-align:center; margin-bottom:20px;">
+<div style="text-align:center; margin-bottom:5px;">
 
   <button id="saveBtn" class="admin-btn"
     style="
-      width:300px;
-      padding:12px 0;
+      width:100px;
+      padding:5px 0;
       font-family:Lexend;
-      font-size:22px;
+      font-size:21px;
       font-weight:bold;
       color:white;
       background-color:#228B22;
@@ -203,18 +203,17 @@
       border-radius:50px;
       box-shadow:0 4px 0 rgba(0,0,0,0.35), 0 6px 10px rgba(0,0,0,0.25);
       cursor:pointer;
-      margin-bottom:14px;
+      margin-bottom:10px;
     ">
-    SAVE LISTING
+    SAVE<br>LISTING
   </button>
-  <br>
-
+  
   <button id="saveClearBtn" class="admin-btn"
     style="
-      width:300px;
-      padding:12px 0;
+      width:100px;
+      padding:5px 0;
       font-family:Lexend;
-      font-size:22px;
+      font-size:21px;
       font-weight:bold;
       color:#228B22;
       background-color:#66FF00;
@@ -222,17 +221,17 @@
       border-radius:50px;
       box-shadow:0 4px 0 rgba(0,0,0,0.35), 0 6px 10px rgba(0,0,0,0.25);
       cursor:pointer;
-      margin-bottom:14px;
+      margin-bottom:10px;
     ">
-    SAVE &amp; CLEAR
+    SAVE &amp;<br>CLEAR
   </button>
-<br>
+  
   <button id="clearBtn" class="admin-btn"
     style="
-      width:300px;
-      padding:12px 0;
+      width:100px;
+      padding:5px 0;
       font-family:Lexend;
-      font-size:22px;
+      font-size:21px;
       font-weight:bold;
       color:white;
       background-color:#CC0000;
@@ -240,7 +239,7 @@
       border-radius:50px;
       box-shadow:0 4px 0 rgba(0,0,0,0.35), 0 6px 10px rgba(0,0,0,0.25);
       cursor:pointer;
-      margin-bottom:14px;
+      margin-bottom:10px;
     ">
     CLEAR FORM
   </button>
@@ -249,12 +248,12 @@
         <!-- BUILD PRODUCT CODE SECTION -->
 
         <!-- 3 DROPDOWN BOXES ON SAME LINE -->
-        <div style="display:flex; gap:10px;">
+        <div style="display:flex; gap:5px;">
 
 <!-- INTEREST -->
 <div>
   <label for="interest">Interest:</label><br>
-  <select id="interest" style="width:120px; font-weight:bold;"
+  <select id="interest" style="width:150px; font-weight:bold;"
         onchange="applySelectedOptionStyle('interest')">
   <option value="" selected></option>
     <option value="F"
@@ -271,7 +270,7 @@
 <!-- PRODUCT TYPE -->
 <div>
   <label for="ptype">Product Type:</label><br>
-  <select id="ptype" style="width:225px; font-weight:bold;"
+  <select id="ptype" style="width:250px; font-weight:bold;"
         onchange="applySelectedOptionStyle('ptype')">
     <option value="" selected></option>
     <!-- T‑Shirts: rust orange background, bright green text -->
@@ -296,7 +295,7 @@
 <!-- Site Code, position 3 of Product Code -->
 <div>
   <label for="site">Site Family:</label>
-  <select id="site" style="width:150px; font-weight:bold;"
+  <select id="site" style="width:175px; font-weight:bold;"
         onchange="applySelectedOptionStyle('site')">
   <option value="" selected></option>
     <!-- KIDS: orange background, white text -->
@@ -329,7 +328,7 @@ function applySelectedOptionStyle(selectId) {
 </script>
 
         <!-- TAGS LIVE IN COLUMN 1 (AS YOU REQUESTED) -->
-        <label for="tags">Search Tags (comma separated ", "):</label><br>
+        <label for="tags">Search Tags ", ":</label><br>
         <textarea id="tags" rows="4"></textarea>
 
       </td>
@@ -737,7 +736,7 @@ const cardHTML =
   ? "<div style='margin:14px 0; text-align:center;'>" +
       "<a href='" + encodeURI(purl) + "' target='_blank' rel='noopener noreferrer' " +
          "style='display:inline-block; " +
-                "padding:10px 22px; " +
+                "padding:10px 21px; " +
                 "font-family:Lexend; " +
                 "font-size:18px; " +
                 "font-weight:bold; " +
