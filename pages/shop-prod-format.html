@@ -170,7 +170,7 @@
   </script>
 
   <!-- PAGE TITLE -->
-  <h2 style="text-align:center;">GPA'S Shop — Format Product Card -- 01/14 - A1</h2>
+  <h2 style="text-align:center;">GPA'S Shop — Format Product Card -- 01/14 - A2</h2>
 
   <!-- 
     MAIN 3-COLUMN TABLE 
@@ -947,73 +947,6 @@ const cardHTML =
     }
   }
 
-
-  /* ===============================================================
-     DELETE PRODUCT FILE
-     - Prompts for confirmation.
-     - Sends DELETE via GitHub API using file SHA.
-  ================================================================= */
-  async function deleteProductFile() {
-    const codeField = document.getElementById("pcode");
-    const code = codeField ? codeField.value.trim() : "";
-
-    if (!code) {
-      alert("Enter or load a product code before deleting.");
-      return;
-    }
-
-    if (!confirm(`Really delete product file for code: ${code}?`)) {
-      return;
-    }
-
-    const token = requireToken();
-    if (!token) return;
-
-    const filename = `${code}.html`;
-    const filePath = `prod/${filename}`;
-    const url = `https://api.github.com/repos/GpaJohnsStories/GpasShop/contents/${filePath}`;
-
-    try {
-      // First get SHA
-      const checkResp = await fetch(url, {
-        headers: { "Authorization": `token ${token}` }
-      });
-
-      if (!checkResp.ok) {
-        alert("Could not find that product file on GitHub.");
-        return;
-      }
-
-      const data = await checkResp.json();
-      const sha = data.sha;
-
-      // Now delete
-      const deleteResp = await fetch(url, {
-        method: "DELETE",
-        headers: {
-          "Authorization": `token ${token}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          message: `Delete product ${filename}`,
-          sha: sha
-        })
-      });
-
-      if (deleteResp.ok) {
-        alert(`Deleted product file:\nprod/${filename}`);
-        clearFormFields();
-      } else {
-        const errData = await deleteResp.json();
-        alert("GitHub delete failed:\n" + JSON.stringify(errData, null, 2));
-      }
-    } catch (err) {
-      console.error("Error deleting product:", err);
-      alert("Error deleting product. See console for details.");
-    }
-  }
-
-
   /* ===============================================================
      SAVE PRODUCT FILE
      - Uses window.finalProductHTML (from formatListing()).
@@ -1139,28 +1072,42 @@ if (rawPrice && !isNaN(rawPrice) && Number(rawPrice) > 0) {
 
 /* ===============================================================
    BUTTON HANDLERS — CLEAN, SINGLE-TRIGGER SETUP
+   (DOM-safe, future-proof)
 ================================================================ */
+document.addEventListener("DOMContentLoaded", () => {
 
-/* SAVE LISTING */
-document.getElementById("saveBtn").addEventListener("click", () => {
-  saveProductFile();
+  const saveBtn      = document.getElementById("saveBtn");
+  const saveClearBtn = document.getElementById("saveClearBtn");
+  const clearBtn     = document.getElementById("clearBtn");
+  const formatBtn    = document.getElementById("formatBtn");
+
+  if (saveBtn) {
+    saveBtn.addEventListener("click", () => {
+      saveProductFile();
+    });
+  }
+
+  if (saveClearBtn) {
+    saveClearBtn.addEventListener("click", () => {
+      saveProductFile();
+      if (confirm("Clear all fields?")) clearFormFields();
+    });
+  }
+
+  if (clearBtn) {
+    clearBtn.addEventListener("click", () => {
+      if (confirm("Clear all fields?")) clearFormFields();
+    });
+  }
+
+  if (formatBtn) {
+    formatBtn.addEventListener("click", () => {
+      formatListing();
+    });
+  }
+
 });
 
-/* SAVE & CLEAR */
-document.getElementById("saveClearBtn").addEventListener("click", () => {
-  saveProductFile();
-  if (confirm("Clear all fields?")) clearFormFields();
-});
-
-/* CLEAR FORM */
-document.getElementById("clearBtn").addEventListener("click", () => {
-  if (confirm("Clear all fields?")) clearFormFields();
-});
-
-/* PREVIEW LISTING */
-document.getElementById("formatBtn").addEventListener("click", () => {
-  formatListing();
-});
 
   </script>
 
