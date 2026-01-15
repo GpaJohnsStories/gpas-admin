@@ -170,7 +170,7 @@
   </script>
 
   <!-- PAGE TITLE -->
-  <h2 style="text-align:center;">GPA'S Shop — Format Product Card -- 01/14 - A2</h2>
+  <h2 style="text-align:center;">GPA'S Shop — Format Product Card -- 01/14 - A3</h2>
 
   <!-- 
     MAIN 3-COLUMN TABLE 
@@ -638,46 +638,6 @@ function detectStoreName(url) {
   return "";
 }
 
-/* ===============================================================
-   DESCRIPTION WORD + SHORT WORD COUNTER
-   - No limits enforced.
-   - Counts total words.
-   - Tracks % of 5-letter (or fewer) words.
-================================================================ */
-(function setupDescriptionCounter() {
-  const desc = document.getElementById('desc');
-  const descCounter = document.getElementById('descCounter');
-  const shortWordPct = document.getElementById('shortWordPct');
-
-  if (!desc || !descCounter || !shortWordPct) return;
-
-  desc.addEventListener('input', () => {
-    const text = desc.value.trim();
-
-    if (!text) {
-      descCounter.textContent = 'Words: 0';
-      shortWordPct.textContent = '0% 5-letter words';
-      return;
-    }
-
-    const words = text.split(/\s+/);
-    const wordCount = words.length;
-
-    const shortWords = words.filter(w =>
-      w.replace(/[^a-zA-Z]/g, '').length <= 5
-    );
-
-    const pct = Math.round((shortWords.length / wordCount) * 100);
-
-    descCounter.textContent = 'Words: ' + wordCount;
-    shortWordPct.textContent = pct + '% 5-letter words';
-  });
-})();
-
-<div style="font-size:15px; color:#555; margin-top:6px;">
-  Allowed HTML: &lt;b&gt; &lt;i&gt; &lt;u&gt; &lt;p&gt; &lt;br&gt;
-</div>
-
   /* ===============================================================
      FORMAT LISTING
      - Collects all fields.
@@ -850,101 +810,6 @@ const cardHTML =
       return null;
     }
     return token;
-  }
-
-
-  /* ===============================================================
-     LOAD PRODUCT
-     - Prompts for a product code.
-     - Fetches prod/[code].html from GitHub.
-     - Parses the HTML to re-fill the form as best we can.
-     - NOTE: Parsing is approximate, but enough for admin edits.
-  ================================================================= */
-  async function loadProduct() {
-    const code = prompt("Enter the product code to load (e.g., FT1-001):");
-    if (!code) return;
-
-    const token = requireToken();
-    if (!token) return;
-
-    const filename = `${code}.html`;
-    const filePath = `prod/${filename}`;
-    const url = `https://api.github.com/repos/GpaJohnsStories/GpasShop/contents/${filePath}`;
-
-    try {
-      const resp = await fetch(url, {
-        headers: { "Authorization": `token ${token}` }
-      });
-
-      if (!resp.ok) {
-        alert("Could not load that product. Check the code and try again.");
-        return;
-      }
-
-      const data = await resp.json();
-      const contentDecoded = decodeURIComponent(escape(window.atob(data.content)));
-
-      // Very simple parsing: create a temporary DOM
-      const tempDiv = document.createElement("div");
-      tempDiv.innerHTML = contentDecoded;
-
-      const card = tempDiv.querySelector(".product-card");
-      if (!card) {
-        alert("Loaded file does not contain a recognizable product card.");
-        return;
-      }
-
-      // Extract fields from card
-      const titleEl   = card.querySelector(".product-title");
-      const authorEl  = card.querySelector(".product-author");
-      const codeEl    = card.querySelector(".product-code");
-      const priceEl   = card.querySelector(".product-price");
-      const descEl    = card.querySelector(".product-description");
-      const tagsEl    = card.querySelector(".product-tags");
-      const imgEl     = card.querySelector("img.product-image");
-      const linkEl    = card.querySelector(".product-link a");
-
-      document.getElementById("pcode").value  = codeEl ? codeEl.textContent.trim() : code;
-      document.getElementById("title").value  = titleEl ? titleEl.textContent.trim() : "";
-      document.getElementById("author").value = authorEl ? authorEl.textContent.trim() : "";
-
-      // Strip "$ " from price if present
-      if (priceEl) {
-        let rawPrice = priceEl.textContent.replace("$", "").trim();
-        document.getElementById("cost").value = rawPrice;
-      } else {
-        document.getElementById("cost").value = "";
-      }
-
-      document.getElementById("desc").value = descEl ? descEl.textContent.trim() : "";
-      // Trigger desc counter update
-      const descCounter = document.getElementById("descCounter");
-      if (descCounter) {
-        descCounter.textContent = document.getElementById("desc").value.length + " / 600";
-      }
-
-      if (tagsEl) {
-        const txt = tagsEl.textContent.replace(/^Tags:\s*/i, "").trim();
-        document.getElementById("tags").value = txt;
-      } else {
-        document.getElementById("tags").value = "";
-      }
-
-      document.getElementById("imgurl").value = imgEl ? imgEl.getAttribute("src") || "" : "";
-      document.getElementById("purl").value   = linkEl ? linkEl.getAttribute("href") || "" : "";
-
-      // Rebuild preview from loaded card
-      window.finalProductHTML = card.outerHTML;
-      const preview = document.getElementById("previewBox");
-      if (preview) {
-        preview.innerHTML = window.finalProductHTML;
-      }
-
-      alert("Product loaded into the form.");
-    } catch (err) {
-      console.error("Error loading product:", err);
-      alert("Error loading product. See console for details.");
-    }
   }
 
   /* ===============================================================
