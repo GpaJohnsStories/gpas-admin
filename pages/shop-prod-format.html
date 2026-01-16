@@ -170,7 +170,7 @@
   </script>
 
   <!-- PAGE TITLE -->
-  <h2 style="text-align:center;">GPA'S Shop — Format Product Card -- 01/16 - B1</h2>
+  <h2 style="text-align:center;">GPA'S Shop — Format Product Card -- 01/16 - B2</h2>
 
   <!-- 
     MAIN 3-COLUMN TABLE 
@@ -738,6 +738,8 @@ const descWordCount = description
   .split(/\s+/)
   .filter(Boolean)
   .length;
+
+alert("Description word count = " + descWordCount);
 
 if (descWordCount < 10) {
   alert("ERROR: Description must be at least 10 words. Fix it and try again.");
