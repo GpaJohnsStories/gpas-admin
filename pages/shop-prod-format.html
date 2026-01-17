@@ -170,7 +170,7 @@
   </script>
 
   <!-- PAGE TITLE -->
-  <h2 style="text-align:center;">GPA'S Shop — Format Product Card -- 01/16 - B4</h2>
+  <h2 style="text-align:center;">GPA'S Shop — Format Product Card -- 01/17 - A2</h2>
 
   <!-- 
     MAIN 3-COLUMN TABLE 
@@ -1189,16 +1189,88 @@ document.addEventListener("DOMContentLoaded", () => {
   const clearBtn     = document.getElementById("clearBtn");
   const formatBtn    = document.getElementById("formatBtn");
 
+  const overlay      = document.getElementById("saveConfirmOverlay");
+  const confirmBtn   = document.getElementById("confirmSaveBtn");
+  const cancelBtn    = document.getElementById("cancelSaveBtn");
+
+  let pendingClearAfterSave = false;
+
+  /* -------------------------------------------------------------
+     OPEN SAVE CONFIRMATION MODAL
+  ------------------------------------------------------------- */
+  function openSaveConfirm(clearAfter) {
+
+    // Require a preview before saving
+    if (!window.finalProductHTML) {
+      alert("Preview the listing before saving.");
+      return;
+    }
+
+    const code  = document.getElementById("pcode").value.trim();
+    const title = document.getElementById("title").value.trim();
+    const cost  = document.getElementById("cost").value.trim();
+
+    if (!code || !title) {
+      alert("Product Code and Title are required before saving.");
+      return;
+    }
+
+    document.getElementById("confirmCode").textContent  = code;
+    document.getElementById("confirmTitle").textContent = title;
+    document.getElementById("confirmPrice").textContent =
+      (cost && !isNaN(cost) && Number(cost) > 0)
+        ? "$ " + Number(cost).toFixed(2)
+        : "(no price)";
+
+    pendingClearAfterSave = clearAfter;
+    overlay.style.display = "flex";
+  }
+
+  /* -------------------------------------------------------------
+     CONFIRM SAVE — LOCK IDENTITY + PROCEED
+  ------------------------------------------------------------- */
+  confirmBtn.addEventListener("click", () => {
+
+    overlay.style.display = "none";
+
+    // Lock identity ONLY ON FIRST CONFIRMED SAVE
+    if (!productCodeLocked) {
+      productCodeLocked = true;
+      lockedProductCode = document.getElementById("pcode").value.trim();
+      lockedCardDate    = new Date().toISOString();
+
+      // Disable manual editing of Product Code
+      const pcodeInput = document.getElementById("pcode");
+      if (pcodeInput) pcodeInput.disabled = true;
+    }
+
+    saveProductFile();
+
+    if (pendingClearAfterSave) {
+      clearFormFields();
+    }
+  });
+
+  /* -------------------------------------------------------------
+     CANCEL SAVE — RETURN TO EDITING
+  ------------------------------------------------------------- */
+  cancelBtn.addEventListener("click", () => {
+    overlay.style.display = "none";
+    pendingClearAfterSave = false;
+  });
+
+  /* -------------------------------------------------------------
+     BUTTON HANDLERS
+  ------------------------------------------------------------- */
   if (saveBtn) {
     saveBtn.addEventListener("click", () => {
-      saveProductFile();
+      openSaveConfirm(false);
     });
   }
 
   if (saveClearBtn) {
     saveClearBtn.addEventListener("click", () => {
-      saveProductFile();
-      if (confirm("Clear all fields?")) clearFormFields();
+      openSaveConfirm(true);
     });
   }
 
@@ -1215,7 +1287,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
-
 
   </script>
 
