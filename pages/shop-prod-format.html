@@ -170,7 +170,7 @@
   </script>
 
   <!-- PAGE TITLE -->
-  <h2 style="text-align:center;">GPA'S Shop — Format Product Card -- 01/17 - A5</h2>
+  <h2 style="text-align:center;">GPA'S Shop — Format Product Card -- 01/17 - A5a</h2>
 
   <!-- 
     MAIN 3-COLUMN TABLE 
@@ -599,6 +599,7 @@ function applySelectedOptionStyle(selectId) {
 </script>
 
 <script>
+console.log("SCRIPT START");
 
 /* ===============================================================
    PRODUCT IDENTITY LOCK STATE (authoritative lifecycle)
@@ -696,6 +697,8 @@ async function buildProductCode() {
      - Forces pattern like IP?-NNN.
      - Strips invalid characters, uppercases letters.
   ================================================================= */
+  console.log("PROBE 700");
+
 function validateCode(input) {
 
   // HARD STOP: Product Code cannot be edited once locked
@@ -807,6 +810,7 @@ function detectStoreName(url) {
 
   return "";
 }
+console.log("PROBE 813");
 
   /* ===============================================================
      FORMAT LISTING
@@ -895,6 +899,7 @@ function formatListing() {
 
   const hasPrice =
     cost && !isNaN(cost) && Number(cost) > 0;
+console.log("PROBE 902");
 
   /* -------------------------------------------------------------
      4) BUILD PRODUCT CARD HTML (template literal, no concat bugs)
@@ -993,6 +998,7 @@ function formatListing() {
     }
     return token;
   }
+console.log("PROBE 1000");
 
   /* ===============================================================
      SAVE PRODUCT FILE
@@ -1080,6 +1086,7 @@ if (rawPrice && !isNaN(rawPrice) && Number(rawPrice) > 0) {
     }
   }
 
+console.log("PROBE 1089");
 
   /* ===============================================================
      CLEAR FORM FIELDS
