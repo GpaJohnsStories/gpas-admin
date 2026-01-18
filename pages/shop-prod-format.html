@@ -171,7 +171,7 @@
   </script>
 
   <!-- PAGE TITLE -->
-  <h2 style="text-align:center;">GPA'S Shop — Format Product Card -- 01/18 - A2</h2>
+  <h2 style="text-align:center;">GPA'S Shop — Format Product Card -- 01/18 - A3</h2>
 
   <!-- 
     MAIN 3-COLUMN TABLE 
@@ -1094,49 +1094,58 @@ if (rawPrice && !isNaN(rawPrice) && Number(rawPrice) > 0) {
      - Resets all inputs.
      - Clears preview and finalProductHTML.
   ================================================================= */
-  function clearFormFields() {
-    const codeEl   = document.getElementById('pcode');
-    const titleEl  = document.getElementById('title');
-    const authorEl = document.getElementById('author');
-    const costEl   = document.getElementById('cost');
-    const descEl   = document.getElementById('desc');
-    const interest = document.getElementById('interest');
-    const ptype    = document.getElementById('ptype');
-    const site = document.getElementById('site');
-    const tagsEl   = document.getElementById('tags');
-    const purlEl   = document.getElementById('purl');
-    const imgurlEl = document.getElementById('imgurl');
+function clearFormFields() {
+  // element references
+  const codeEl   = document.getElementById('pcode');
+  const titleEl  = document.getElementById('title');
+  const authorEl = document.getElementById('author');
+  const costEl   = document.getElementById('cost');
+  const descEl   = document.getElementById('desc');
+  const interest = document.getElementById('interest');
+  const ptype    = document.getElementById('ptype');
+  const site     = document.getElementById('site');
+  const tagsEl   = document.getElementById('tags');
+  const purlEl   = document.getElementById('purl');
+  const imgurlEl = document.getElementById('imgurl');
 
-    if (codeEl)   codeEl.value = '';
-    if (titleEl)  titleEl.value = '';
-    if (authorEl) authorEl.value = '';
-    if (costEl)   costEl.value = '';
-    if (descEl)   descEl.value = '';
-    if (tagsEl)   tagsEl.value = '';
-    if (purlEl)   purlEl.value = '';
-    if (imgurlEl) imgurlEl.value = '';
-    if (interest) interest.value = '';
-    if (site) site.value = '';
-    if (ptype)    ptype.value = '';
+  // START: confirm handler entered
+  console.log('clearFormFields START', new Date().toISOString());
 
-    const preview = document.getElementById("previewBox");
-    if (preview) preview.innerHTML = '';
+  // clear values
+  if (codeEl)   codeEl.value = '';
+  if (titleEl)  titleEl.value = '';
+  if (authorEl) authorEl.value = '';
+  if (costEl)   costEl.value = '';
+  if (descEl)   descEl.value = '';
+  if (tagsEl)   tagsEl.value = '';
+  if (purlEl)   purlEl.value = '';
+  if (imgurlEl) imgurlEl.value = '';
+  if (interest) interest.value = '';
+  if (site)     site.value = '';
+  if (ptype)    ptype.value = '';
 
-    window.finalProductHTML = '';
+  const preview = document.getElementById("previewBox");
+  if (preview) preview.innerHTML = '';
+
+  window.finalProductHTML = '';
 
   // ---- UNLOCK PRODUCT CODE BUILDER ----
-window.productCodeLocked = false;
+  window.productCodeLocked = false;
 
-// Re-arm product code builder after programmatic reset
-  const interestEl = document.getElementById('interest');
-  const ptypeEl    = document.getElementById('ptype');
-  const siteEl     = document.getElementById('site');
+  // Re-arm product code builder after programmatic reset
+  if (interest) { interest.dispatchEvent(new Event('input')); interest.dispatchEvent(new Event('change')); }
+  if (ptype)    { ptype.dispatchEvent(new Event('input')); ptype.dispatchEvent(new Event('change')); }
+  if (site)     { site.dispatchEvent(new Event('input')); site.dispatchEvent(new Event('change')); }
 
-  if (interestEl) interestEl.dispatchEvent(new Event('change'));
-  if (ptypeEl)    ptypeEl.dispatchEvent(new Event('change'));
-  if (siteEl)     siteEl.dispatchEvent(new Event('change'));
+  // END: confirm completion and state
+  console.log('clearFormFields END', {
+    interest: interest?.value,
+    ptype: ptype?.value,
+    site: site?.value,
+    locked: window.productCodeLocked
+  });
+}
 
-  }
   
 /* ===============================================================
    BUTTON HANDLERS — CLEAN, SINGLE-TRIGGER SETUP
