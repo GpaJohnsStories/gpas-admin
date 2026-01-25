@@ -1,2 +1,1263 @@
-<!-- Restored content of the file from the previous commit 22bf8ba31d27b00f2ab53a69c024e92544132bb0 -->
-<!-- You would replace this comment with the actual content that existed in the file before it was changed. -->
+<!-- coding: utf-8 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- =========================================================
+       SIMPLE SESSION CHECK — BLOCKS DIRECT ACCESS WITHOUT TOKEN
+  ========================================================== -->
+  <script>
+    const token = sessionStorage.getItem("githubToken");
+    if (!token) window.location.href = "../index.html";
+  </script>
+
+  <meta charset="UTF-8">
+  <title>GPA'S Shop Product Formatter</title>
+  <link rel="icon" href="icons/admin-favicon.jpg" type="image/jpeg">
+
+  <!-- 
+    NOTE: Your admin menu is a separate file.
+    You will include it manually or via JS injection.
+    This <link> is NOT used to import HTML, but we keep it here
+    as a reminder of where the menu lives.
+    
+    admin menu lives at: ../gpas-admin/pages/admin-menu.html
+  -->
+
+  <style>
+    /* 
+      GLOBAL PAGE STYLING 
+      --------------------
+      Clean, warm, readable. 
+      Lexend-like font at 21px as per your admin design standards.
+    */
+    body {
+      font-family: 'Lexend', sans-serif;
+      font-size: 21px;
+      margin: 0;
+      padding: 0;
+      background-color: #fdfdf4; /* soft warm background */
+    }
+
+    /* 
+      TABLE LAYOUT 
+      ------------
+      Three columns, each ~30% width.
+      Goal: no vertical scrolling on a typical desktop.
+    */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    td {
+      width: 30%;
+      vertical-align: top;
+      padding: 10px;              /* kept fairly small */
+      background-color: #fffbe6;  /* soft yellow input zones */
+    }
+
+    /* 
+      FORM ELEMENTS 
+      --------------
+      Clean, readable, consistent.
+      Tight margins to reduce vertical height.
+    */
+    input, select, textarea {
+      width: 95%;
+      font-size: 21px;
+      margin-bottom: 6px;  /* tighter than default */
+      padding: 4px;        /* slightly smaller padding */
+      border: 3px solid #ccc;
+      border-radius: 4px;
+    }
+
+    textarea {
+      resize: vertical; /* allows expansion if absolutely needed */
+    }
+
+    h2, h3 {
+      margin-top: 0;
+      margin-bottom: 6px;
+    }
+
+/* ADMIN ACTION BUTTONS — 3D PILL STYLE */
+.admin-btn:active {
+  transform: translateY(3px);
+  box-shadow:
+    0 1px 0 rgba(0,0,0,0.35),
+    0 3px 6px rgba(0,0,0,0.25);
+}
+
+/* PRODUCT CARD PREVIEW WIDTH CONTROL */
+#previewBox {
+  width: 350px;
+  height: 380px;
+  padding: 10px;
+  border: 4px solid #ccc;
+  box-sizing: border-box;   /* 🔒 THIS IS THE KEY */
+  overflow: auto;
+  background-color: #fdfdf4;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+    /* 
+      DESCRIPTION COUNTER 
+      --------------------
+      Small, subtle, below the textarea.
+    */
+    #descCounter {
+      font-size: 16px;
+      color: #666;
+      margin-top: -6px;
+      margin-bottom: 6px;
+    }
+
+/* Ensure the card inside doesn't stretch wider */
+#previewBox .product-card {
+  width: 300px;
+  max-width: 300px;
+  margin: 0 auto;      /* center it inside the preview box */
+}
+
+/* Align title and author in center */
+.product-title,
+.product-author {
+  text-align: center;
+}
+/* Align product code left, price on right */
+.product-code-price-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 21px;
+  margin: 4px 0;
+}
+
+/* Make product description regular and NOT bold */
+.product-description {
+  font-weight: normal;
+}
+
+/* Make product tags small font and not bold */
+.product-tags {
+  font-size: 12pt;
+  font-weight: normal;
+  color: #444;
+  margin-top: 6px;
+}
+
+  </style>
+</head>
+
+<body>
+  <!-- 
+    ADMIN MENU PLACEHOLDER 
+    -----------------------
+    You will manually include the admin menu HTML here.
+    This keeps your admin UI consistent across all tools.
+  -->
+  <div id="admin-header"></div>
+
+  <script>
+    // Load the admin menu into the header
+    console.log("Loading admin menu…");
+    fetch('admin-menu.html')
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('admin-header').innerHTML = html;
+      })
+      .catch(err => {
+        console.error('Failed to load admin menu:', err);
+      });
+  </script>
+
+  <!-- PAGE TITLE -->
+  <h2 style="text-align:center;">GPA'S Shop — Format Product Card -- 01/25 - AA</h2>
+
+  <!-- 
+    MAIN 3-COLUMN TABLE 
+    --------------------
+    Column 1: Build the Code + Tags + Control Buttons
+    Column 2: Product Details (ends after Description)
+    Column 3: Format Button + Preview (no raw HTML box)
+  -->
+  <table>
+    <tr>
+
+      <!-- ========================================================= -->
+      <!-- COLUMN 1 — CONTROL BUTTONS + BUILD THE PRODUCT CODE + TAGS -->
+      <!-- ========================================================= -->
+      <td>
+
+        <!-- CONTROL BUTTONS -->
+<div style="text-align:center; margin-bottom:5px;">
+
+  <button id="saveBtn" class="admin-btn"
+    style="
+      width:120px;
+      padding:5px 0;
+      font-family:Lexend;
+      font-size:21px;
+      font-weight:bold;
+      color:#ffff00;
+      background-color:#228B22;
+      border:none;
+      border-radius:50px;
+      box-shadow:0 4px 0 rgba(0,0,0,0.35), 0 6px 10px rgba(0,0,0,0.25);
+      cursor:pointer;
+      margin-bottom:10px;
+    ">
+    SAVE<br>LISTING
+  </button>
+  
+  <button id="saveClearBtn" class="admin-btn"
+    style="
+      width:130px;
+      padding:5px 0;
+      font-family:Lexend;
+      font-size:21px;
+      font-weight:bold;
+      color:#228B22;
+      background-color:#66FF00;
+      border:none;
+      border-radius:50px;
+      box-shadow:0 4px 0 rgba(0,0,0,0.35), 0 6px 10px rgba(0,0,0,0.25);
+      cursor:pointer;
+      margin-bottom:10px;
+    ">
+    SAVE &amp;<br>CLEAR
+  </button>
+  
+  <button id="clearBtn" class="admin-btn"
+    style="
+      width:120px;
+      padding:5px 0;
+      font-family:Lexend;
+      font-size:21px;
+      font-weight:bold;
+      color:white;
+      background-color:#CC0000;
+      border:none;
+      border-radius:50px;
+      box-shadow:0 4px 0 rgba(0,0,0,0.35), 0 6px 10px rgba(0,0,0,0.25);
+      cursor:pointer;
+      margin-bottom:10px;
+    ">
+    CLEAR FORM
+  </button>
+</div>
+
+        <!-- BUILD PRODUCT CODE SECTION -->
+
+        <!-- 3 DROPDOWN BOXES ON SAME LINE -->
+        <div style="display:flex; gap:5px;">
+
+<!-- INTEREST -->
+<div>
+  <label for="interest">Interest:</label><br>
+  <select id="interest" style="width:150px; font-weight:bold;"
+        onchange="applySelectedOptionStyle('interest')">
+  <option value="" selected></option>
+    <option value="F"
+      style="font-weight:bold; background-color:#5A2D82; color:#FFD700;">
+      (F) FAITH
+    </option>
+    <option value="H"
+      style="font-weight:bold; background-color:#B7410E; color:#00FF66;">
+      (H) HAPPY
+    </option>
+  </select>
+</div>
+
+<!-- PRODUCT TYPE -->
+<div>
+  <label for="ptype">Product Type:</label><br>
+  <select id="ptype" style="width:250px; font-weight:bold;"
+        onchange="applySelectedOptionStyle('ptype')">
+    <option value="" selected></option>
+    <!-- T‑Shirts: rust orange background, bright green text -->
+    <option value="T"
+      style="font-weight:bold; background-color:#B7410E; color:#00FF66;">
+      (T) T‑SHIRTS
+    </option>
+    <!-- Books & Bibles: purple background, gold text -->
+    <option value="B"
+      style="font-weight:bold; background-color:#5A2D82; color:#FFD700;">
+      (B) BOOKS & BIBLES
+    </option>
+    <!-- Other Stuff: medium brown background, white text -->
+    <option value="O"
+      style="font-weight:bold; background-color:#8B5A2B; color:#FFFFFF;">
+      (O) OTHER STUFF
+    </option>
+  </select>
+</div>
+</div>
+
+<!-- Site Code, position 3 of Product Code -->
+<div>
+  <label for="site">Site Family:</label>
+  <select id="site" style="width:175px; font-weight:bold;"
+        onchange="applySelectedOptionStyle('site')">
+  <option value="" selected></option>
+    <!-- KIDS: orange background, white text -->
+    <option value="K"
+      style="font-weight:bold; background:#f97316; color:#ffffff;">
+      (K) GpasKids
+    </option>
+    <!-- FAITH: green background, white text -->
+    <option value="F"
+      style="font-weight:bold; background:#228b22; color:#ffffff;">
+      (F) GpasFaith
+    </option>
+    <!-- SHOP: medium brown background, white text -->
+    <option value="S"
+      style="font-weight:bold; background:#a0522d; color:#ffffff;">
+      (S) GpasShop
+    </option>
+  </select>
+</div>
+
+<script>
+function applySelectedOptionStyle(selectId) {
+  const sel = document.getElementById(selectId);
+  const opt = sel.options[sel.selectedIndex];
+
+  // Copy the option's background and text color onto the select box
+  sel.style.backgroundColor = opt.style.backgroundColor || "#ffffff";
+  sel.style.color = opt.style.color || "#000000";
+}
+</script>
+
+        <!-- TAGS LIVE IN COLUMN 1 (AS YOU REQUESTED) -->
+      <br>
+        <label for="tags">
+  Tags (max 10, 1–2 words each, ", "):
+</label><br>
+
+        <textarea id="tags" rows="3"></textarea>
+
+<!-- Editor HTML Approved Code: -->
+
+  <div style="margin-top:10px; font-family:Lexend; font-size:16px; color:#333;">
+    <strong>Allowed HTML:</strong>
+    &nbsp;&nbsp;&nbsp; &lt;br&gt; &nbsp; &lt;b&gt; &nbsp; &lt;i&gt; &nbsp; &lt;em&gt; &nbsp; &lt;strong&gt;
+  </div>
+</div>
+
+</td>
+
+      <!-- ========================================================= -->
+      <!-- COLUMN 2 — PRODUCT DETAILS (ends after description)       -->
+      <!-- ========================================================= -->
+      <td>
+
+        <!-- PRODUCT CODE + PRICE ON SAME LINE -->
+        <div style="display:flex; gap:40px; align-items:flex-start;">
+
+          <!-- PRODUCT CODE (AUTO + MANUAL SAFE) -->
+          <div>
+            <label for="pcode">Product Code:</label><br>
+            <input
+              type="text"
+              id="pcode"
+              placeholder="IPS-nnn"
+              style="width:150px; font-weight:bold;"
+              oninput="validateCode(this)">
+          </div>
+
+          <!-- PRICE -->
+          <div>
+            <label for="cost">Price:</label><br>
+            <input
+              type="text"
+              id="cost"
+              style="width:80px; font-weight:bold;"
+              oninput="validatePrice(this)">
+          </div>
+
+        </div>
+
+        <!-- PRODUCT LINK URL (public product page) -->
+        <input
+          id="purl"
+          type="text"
+          placeholder="Product Link URL"
+          style="width:95%; font-size:21px; font-weight:bold; margin-bottom:6px;">
+
+        <!-- IMAGE URL (path to product image) -->
+        <input
+          id="imgurl"
+          type="text"
+          placeholder="Product Image URL"
+          style="width:95%; font-size:21px; font-weight:bold; margin-bottom:6px;">
+
+        <!-- PRODUCT TITLE -->
+        <input
+          id="title"
+          type="text"
+          placeholder="Product Title"
+          style="width:95%; font-size:21px; font-weight:bold; margin-bottom:6px;">
+
+        <!-- BOOK AUTHOR or BIBLE VERSION -->
+        <input
+          id="author"
+          type="text"
+          placeholder="Author or Version"
+          style="width:95%; font-size:21px; font-weight:bold; margin-bottom:6px;">
+
+        <!-- DESCRIPTION -->
+        <label for="desc">Description:</label><br>
+        <textarea id="desc" rows="8"></textarea>
+        
+        <div style="display:flex; justify-content:space-between; font-size:14px; margin-top:1px;">
+          <span id="descCounter">Words: 0</span>
+          <span id="shortWordPct">0% 5-letter words</span>
+        </div>
+        
+        <div style="font-size:15px; color:#555; margin-top:1px;">
+          Allowed HTML: &lt;b&gt; &lt;i&gt; &lt;u&gt; &lt;p&gt; &lt;br&gt;
+        </div>
+      </td>
+
+      <!-- ========================================================= -->
+      <!-- COLUMN 3 — PREVIEW BUTTON + PREVIEW ONLY                   -->
+      <!-- ========================================================= -->
+      <td>
+
+        <!-- PREVIEW BUTTON -->
+<button id="formatBtn" class="admin-btn"
+  style="
+    width:330px;
+    padding:12px 0;
+    font-family:Lexend;
+    font-size:22px;
+    font-weight:bold;
+    color:white;
+    background-color:#228B22;
+    border:none;
+    border-radius:50px;
+    box-shadow:0 4px 0 rgba(0,0,0,0.35), 0 6px 10px rgba(0,0,0,0.25);
+    cursor:pointer;
+    margin-bottom:14px;
+  ">
+  PREVIEW LISTING
+</button>
+
+
+        
+        <!-- PREVIEW BOX (SCROLLABLE) -->
+        <div id="previewBox">
+          <!-- formatted preview will appear here -->
+        </div>
+
+      </td>
+
+    </tr>
+  </table>
+
+<!-- =============================================================
+     SAVE CONFIRMATION MODAL — PRODUCT IDENTITY LOCK MOMENT
+     - Bright visual interruption
+     - Explicit language
+     - No ambiguity
+     - No browser confirm()
+============================================================== -->
+<style>
+  #saveConfirmOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+
+  #saveConfirmModal {
+    background: #fff3cd; /* bright warning yellow */
+    border: 6px solid #ff9800;
+    border-radius: 14px;
+    width: 520px;
+    max-width: 90%;
+    padding: 22px;
+    font-family: Lexend, sans-serif;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  }
+
+  #saveConfirmModal h3 {
+    margin-top: 0;
+    font-size: 26px;
+    text-align: center;
+    color: #7a3e00;
+  }
+
+  #saveConfirmDetails {
+    font-size: 20px;
+    margin: 14px 0;
+    line-height: 1.4;
+  }
+
+  #saveConfirmDetails strong {
+    display: inline-block;
+    width: 140px;
+  }
+
+  #saveConfirmWarning {
+    font-size: 18px;
+    margin: 14px 0;
+    color: #5c2c00;
+  }
+
+  #saveConfirmButtons {
+    display: flex;
+    gap: 14px;
+    margin-top: 18px;
+  }
+
+  .saveConfirmBtn {
+    flex: 1;
+    padding: 12px 10px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 999px;
+    cursor: pointer;
+    border: none;
+  }
+
+  #confirmSaveBtn {
+    background: #2e7d32;
+    color: #ffffff;
+    box-shadow: 0 4px 0 #1b5e20;
+  }
+
+  #cancelSaveBtn {
+    background: #b71c1c;
+    color: #ffffff;
+    box-shadow: 0 4px 0 #7f0000;
+  }
+</style>
+
+<div id="saveConfirmOverlay">
+  <div id="saveConfirmModal">
+    <h3>Confirm Save Product Listing</h3>
+
+    <div id="saveConfirmDetails">
+      <div><strong>Product Code:</strong> <span id="confirmCode"></span></div>
+      <div><strong>Title:</strong> <span id="confirmTitle"></span></div>
+      <div><strong>Price:</strong> <span id="confirmPrice"></span></div>
+    </div>
+
+    <div id="saveConfirmWarning">
+      Once saved, the <strong>Product Code cannot be changed</strong> by this page.<br>
+      You may continue editing all other fields after saving.
+    </div>
+
+    <div id="saveConfirmButtons">
+      <button id="confirmSaveBtn" class="saveConfirmBtn">
+        Save Product Listing EXACTLY as it is now<br>(locks Product Code)
+      </button>
+
+      <button id="cancelSaveBtn" class="saveConfirmBtn">
+        Re‑Edit Product Listing (return to editing)<br>
+        <span style="font-weight:normal; font-size:16px;">
+          This may cause Product Code to be changed by the system.
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+
+  
+  <!-- ============================================================= -->
+  <!-- JAVASCRIPT SECTION                                            -->
+  <!-- ============================================================= -->
+  <script>
+/* ===============================================================
+   DESCRIPTION WORD + SHORT WORD COUNTER
+   Informational only — no limits enforced.
+================================================================ */
+(function setupDescriptionCounter() {
+  const desc = document.getElementById('desc');
+  const descCounter = document.getElementById('descCounter');
+  const shortWordPct = document.getElementById('shortWordPct');
+
+  if (!desc || !descCounter || !shortWordPct) return;
+
+  desc.addEventListener('input', () => {
+    const text = desc.value.trim();
+
+    if (!text) {
+      descCounter.textContent = 'Words: 0';
+      shortWordPct.textContent = '0% 5-letter words';
+      return;
+    }
+
+    const words = text.split(/\s+/);
+    const wordCount = words.length;
+
+    const shortWords = words.filter(w =>
+      w.replace(/[^a-zA-Z]/g, '').length <= 5
+    );
+
+    const pct = Math.round((shortWords.length / wordCount) * 100);
+
+    descCounter.textContent = 'Words: ' + wordCount;
+    shortWordPct.textContent = pct + '% 5-letter words';
+  });
+})();
+</script>
+
+<script>
+
+/* ===============================================================
+   PRODUCT IDENTITY LOCK STATE (authoritative lifecycle)
+
+   productCodeLocked:
+     - false = "Preview/Edit mode"
+       * Interest / Product Type / Site Family may be changed
+       * Product Code may be rebuilt and sequence recalculated
+       * Product Code may be manually typed (validated/sanitized)
+
+     - true  = "Saved identity mode"
+       * Product Code MUST NOT change in this page
+       * Dropdown-driven rebuild MUST NOT run
+       * Manual typing into Product Code MUST NOT modify it
+       * Re-saving overwrites the existing product file for that code
+
+   lockedProductCode:
+     - The Product Code as it existed at the first CONFIRMED SAVE
+     - Used as a mechanical truth source after locking
+
+   lockedCardDate:
+     - The FIRST LISTING DATE for GpasShop (ISO-8601)
+     - Set once at first CONFIRMED SAVE
+     - NEVER updated on later edits/saves
+     - There is intentionally NO "last updated" date anywhere
+================================================================= */
+let productCodeLocked = false;
+let lockedProductCode = "";
+let lockedCardDate = "";
+  
+  /* ===============================================================
+   PRODUCT CODE BUILDER
+   Pattern: [INTEREST][TYPE][SITE]-[NNN].html
+   - INTEREST = F or H
+   - TYPE     = T, B, or O
+   - SITE     = F (Faith), K (Kids), S (Shop)
+   - Auto-increments suffix by scanning /prod on GitHub
+================================================================= */
+
+async function buildProductCode() {
+  // HARD STOP: Product identity is locked after first save
+  if (productCodeLocked) return;
+
+  // Build a strict 3-letter prefix (letters only, first letter of each select)
+  const a = (document.getElementById("interest")?.value || "").toUpperCase().replace(/[^A-Z]/g,"").slice(0,1);
+  const b = (document.getElementById("ptype")?.value    || "").toUpperCase().replace(/[^A-Z]/g,"").slice(0,1);
+  const c = (document.getElementById("site")?.value     || "").toUpperCase().replace(/[^A-Z]/g,"").slice(0,1);
+  const prefix = (a + b + c).padEnd(3, "X").slice(0,3);
+
+  // Need all three dropdowns selected before we attempt a code
+  if (!document.getElementById("interest")?.value || !document.getElementById("ptype")?.value || !document.getElementById("site")?.value) return;
+
+  // Directory listing only — correct repo/folder casing and branch ref
+  const apiUrl = "https://api.github.com/repos/GpaJohnsStories/gpasshop/contents/prod?ref=main";
+  let nextSuffix = "001";
+
+  try {
+    const token = sessionStorage.getItem("githubToken");
+    const response = await fetch(apiUrl, { headers: token ? { Authorization: `token ${token}` } : {} });
+
+    if (!response.ok) {
+      console.warn("GitHub contents fetch returned", response.status);
+    } else {
+      const files = await response.json();
+      const regex = new RegExp("^" + prefix + "-(\\d{3})\\.html$", "i");
+      let max = 0;
+
+      for (const item of files) {
+        if (!item || !item.name) continue;
+        const match = item.name.match(regex);
+        if (match && match[1]) {
+          const num = parseInt(match[1], 10);
+          if (num > max) max = num;
+        }
+      }
+
+      nextSuffix = String(max + 1).padStart(3, "0");
+    }
+  } catch (err) {
+    console.error("Error fetching suffix from GitHub:", err);
+  }
+
+  const finalCode = prefix + "-" + nextSuffix;
+  const pcodeEl = document.getElementById("pcode");
+  if (pcodeEl) pcodeEl.value = finalCode;
+}
+  
+  // Rebuild code whenever interest or type or site changes
+  document.getElementById("interest").addEventListener("change", buildProductCode);
+  document.getElementById("ptype").addEventListener("change", buildProductCode);
+  document.getElementById("site").addEventListener("change", buildProductCode);
+
+
+
+  /* ===============================================================
+     PRODUCT CODE VALIDATION (manual typing safety)
+     - Forces pattern like IP?-NNN.
+     - Strips invalid characters, uppercases letters.
+  ================================================================= */
+
+function validateCode(input) {
+
+  // HARD STOP: Product Code cannot be edited once locked
+  if (productCodeLocked) {
+    input.value = lockedProductCode;
+    return;
+  }
+
+  let v = input.value.toUpperCase();
+  v = v.replace(/[^A-Z0-9\-]/g, "");
+
+  const parts = v.split("-");
+  let left  = (parts[0] || "").replace(/[^A-Z0-9]/g, "").substring(0, 3);
+  let right = (parts[1] || "").replace(/[^0-9]/g, "").substring(0, 3);
+
+  if (!left) {
+    input.value = "";
+    return;
+  }
+
+  let result = left;
+  if (right || v.includes("-")) result += "-";
+  if (right) result += right;
+
+  input.value = result;
+}
+
+  /* ===============================================================
+     PRICE VALIDATION (INPUT FIELD)
+     - No "$" or commas in the box.
+     - Only digits and at most one decimal.
+  ================================================================= */
+  function validatePrice(input) {
+    // Remove $ and commas
+    let v = input.value.replace(/[$,]/g, "");
+
+    // Allow only digits and decimal point
+    v = v.replace(/[^0-9.]/g, "");
+
+    // If multiple decimals, keep first two segments only
+    const parts = v.split(".");
+    if (parts.length > 2) {
+      v = parts[0] + "." + parts[1];
+    }
+
+    input.value = v;
+  }
+
+
+  /* ===============================================================
+     PRICE FORMATTER (FOR DISPLAY)
+     - Converts raw "12" or "12.5" to "$ 12.50".
+     - If input is invalid, falls back to "$ 0.00".
+  ================================================================= */
+  function formatPrice(raw) {
+    if (!raw) return "$ 0.00";
+    let n = parseFloat(String(raw).replace(/[^0-9.]/g, ""));
+    if (isNaN(n)) n = 0;
+    return "$ " + n.toFixed(2);
+  }
+
+/* ===============================================================
+   TAG PARSER + NORMALIZER
+   - Input: textarea text, comma-separated
+   - Output:
+       display: "tag1, tag2, tag3"
+       data:    "tag1,tag2,tag3"
+   - Rules:
+       * trim whitespace
+       * collapse internal spaces
+       * lowercase
+       * remove empties
+       * max 10 tags
+================================================================= */
+function parseTags(rawTags) {
+  if (!rawTags) return { list: [], display: "", data: "" };
+
+  const list = rawTags
+    .split(",")
+    .map(t => t.trim().toLowerCase())
+    .map(t => t.replace(/\s+/g, " "))
+    .filter(t => t.length > 0);
+
+  if (list.length > 10) {
+    alert("ERROR: Max 10 tags. You entered " + list.length + ". Fix it and try again.");
+    return; 
+  }
+
+  return {
+    list,
+    display: list.join(", "),
+    data: list.join(",")
+  };
+}
+
+
+
+// Post Store Name    
+function detectStoreName(url) {
+  if (!url) return "";
+
+  const u = url.toLowerCase();
+
+  if (u.includes("amazon") || u.includes("amzn.to")) return "Amazon";
+  if (u.includes("zazzle")) return "Zazzle";
+
+  // Future‑proofing: if you ever add a bookstore
+  if (u.includes("book")) return "Book Store";
+
+  return "";
+}
+
+  /* ===============================================================
+     FORMAT LISTING
+     - Collects all fields.
+     - Builds the product card HTML.
+     - Updates preview and window.finalProductHTML (for saving).
+  ================================================================= */
+  function formatListing() {
+
+  /* -------------------------------------------------------------
+     1) CAPTURE RAW INPUT VALUES (single source of truth)
+  ------------------------------------------------------------- */
+  const code   = (document.getElementById("pcode").value || "").trim();
+  const title  = (document.getElementById("title").value || "").trim();
+  const author = (document.getElementById("author").value || "").trim();
+  const cost   = (document.getElementById("cost").value || "").trim();
+  const desc   = (document.getElementById("desc").value || "").trim();
+  const tagsRaw = (document.getElementById("tags").value || "").trim();
+  const imgurl = (document.getElementById("imgurl").value || "").trim();
+  const purl   = (document.getElementById("purl").value || "").trim();
+
+  /* -------------------------------------------------------------
+     2) HARD GUARDRAILS — FORMAT MUST FAIL IF ANY RULE IS BROKEN
+  ------------------------------------------------------------- */
+  if (!code) {
+    alert("ERROR: Product Code is required.");
+    return;
+  }
+
+  if (!title) {
+    alert("ERROR: Product Title is required.");
+    return;
+  }
+
+  if (!imgurl) {
+    alert("ERROR: Product Image URL is required.");
+    return;
+  }
+
+  if (!purl) {
+    alert("ERROR: Product Link URL is required.");
+    return;
+  }
+
+  // Description — minimum 10 words (HTML stripped)
+  const descWordCount = desc
+    .replace(/<[^>]*>/g, "")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .length;
+
+  if (descWordCount < 10) {
+    alert("ERROR: Description must be at least 10 words.");
+    return;
+  }
+
+  // Tags — metadata only, 1–10 required
+  const tagsParsed = parseTags(tagsRaw);
+  if (!tagsParsed || !tagsParsed.data) {
+    alert("ERROR: At least one tag is required.");
+    return;
+  }
+
+  const tagCount = tagsParsed.data.split(",").filter(Boolean).length;
+  if (tagCount > 10) {
+    alert("ERROR: No more than 10 tags allowed.");
+    return;
+  }
+
+  /* -------------------------------------------------------------
+     3) DERIVED VALUES
+  ------------------------------------------------------------- */
+  const storeName = detectStoreName(purl);
+
+  // Creation date logic — FIRST SAVE ONLY
+  const cardDate = productCodeLocked
+    ? lockedCardDate
+    : new Date().toISOString();
+
+  const normalizedTitle  = title.toLowerCase();
+  const normalizedAuthor = author.toLowerCase();
+
+  const hasPrice =
+    cost && !isNaN(cost) && Number(cost) > 0;
+
+  /* -------------------------------------------------------------
+     4) BUILD PRODUCT CARD HTML (template literal, no concat bugs)
+  ------------------------------------------------------------- */
+  const cardHTML = `
+<article class="product-card"
+  data-code="${escapeHtml(code)}"
+  data-title="${escapeHtml(normalizedTitle)}"
+  data-author="${escapeHtml(normalizedAuthor)}"
+  data-price="${hasPrice ? Number(cost).toFixed(2) : ""}"
+  data-tags="${escapeHtml(tagsParsed.data)}"
+  data-date="${escapeHtml(cardDate)}"
+  style="width:300px; border:4px solid #999; padding:10px; box-sizing:border-box;">
+
+  <div style="text-align:center;">
+    <a href="${encodeURI(purl)}" target="_blank" rel="noopener noreferrer">
+      <img src="${encodeURI(imgurl)}"
+           alt="${escapeHtml(title)}"
+           style="width:100%; height:auto; border:0;">
+    </a>
+  </div>
+
+  <h3 style="font-family:Lexend; font-size:24px; font-weight:bold; text-align:center; margin:10px 0 5px 0;">
+    ${escapeHtml(title)}
+  </h3>
+
+  ${author ? `
+  <div style="font-family:Lexend; font-size:21px; font-weight:bold; text-align:center; margin-bottom:8px;">
+    ${escapeHtml(author)}
+  </div>` : ""}
+
+  <div style="font-family:Lexend; font-size:21px; margin:10px 0;
+       ${hasPrice ? "display:flex; justify-content:space-between;" : "text-align:center;"}">
+    <span>${escapeHtml(code)}</span>
+    ${hasPrice ? `<span>$ ${Number(cost).toFixed(2)}</span>` : ""}
+  </div>
+
+  <p style="font-family:Lexend; font-size:21px; font-weight:400; line-height:26px; margin:10px 0;">
+    ${desc}
+  </p>
+
+  <div style="margin:14px 0; text-align:center;">
+    <a href="${encodeURI(purl)}" target="_blank" rel="noopener noreferrer"
+       style="display:inline-block;
+              padding:10px 21px;
+              font-family:Lexend;
+              font-size:18px;
+              font-weight:bold;
+              color:#fff;
+              background:#2e7d32;
+              border:4px solid #1b5e20;
+              border-radius:999px;
+              box-shadow:0 3px 0 #666;
+              text-decoration:none;">
+      View Details${storeName ? " at " + storeName + ".com" : ""}
+    </a>
+  </div>
+
+</article>`;
+
+  /* -------------------------------------------------------------
+     5) STORE + PREVIEW
+  ------------------------------------------------------------- */
+  window.finalProductHTML = cardHTML;
+
+  const preview = document.getElementById("previewBox");
+  if (preview) {
+    preview.innerHTML = `<div style="font-weight:400;">${cardHTML}</div>`;
+  }
+}
+
+  /* ===============================================================
+     ESCAPE HTML HELPER
+     - Prevents broken HTML when user types <, >, & in fields.
+  ================================================================= */
+  function escapeHtml(str) {
+    if (!str) return "";
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+
+  /* ===============================================================
+     REQUIRE TOKEN HELPER
+     - Ensures we have the GitHub token before API calls.
+  ================================================================= */
+  function requireToken() {
+    const token = sessionStorage.getItem("githubToken");
+    if (!token) {
+      alert("Missing GitHub token. Please log in again.");
+      return null;
+    }
+    return token;
+  }
+
+  /* ===============================================================
+     SAVE PRODUCT FILE
+     - Uses window.finalProductHTML (from formatListing()).
+     - Wraps it in a full HTML file with timestamp + price comment.
+     - PUT to prod/[code].html via GitHub API.
+  ================================================================= */
+  async function saveProductFile() {
+    const code = (document.getElementById("pcode").value || "").trim();
+    if (!code) {
+      alert("Product Code is required before saving.");
+      return;
+    }
+
+    if (!window.finalProductHTML) {
+      if (!confirm("No formatted listing yet. Save anyway?")) {
+        return;
+      }
+    }
+
+    const now = new Date().toISOString();
+    const timestampComment = "<!-- Saved: " + now + " -->\n";
+
+const rawPrice = (document.getElementById("cost").value || "").trim();
+
+      let priceComment = "";
+      let priceDisplay = "";
+
+// Only treat price as real if > 0
+if (rawPrice && !isNaN(rawPrice) && Number(rawPrice) > 0) {
+  priceDisplay = formatPrice(rawPrice);
+  priceComment = "<!-- Price: " + priceDisplay + " -->\n";
+}
+
+    const fileContent =
+      "<!DOCTYPE html>\n<html>\n<head>\n" +
+      "  <meta charset='UTF-8'>\n" +
+      "  <title>" + code + "</title>\n" +
+      "</head>\n<body>\n" +
+      timestampComment +
+      priceComment +
+      (window.finalProductHTML || "") +
+      "\n</body>\n</html>";
+
+    const token = requireToken();
+    if (!token) return;
+
+    const filename = `${code}.html`;
+    const filePath = `prod/${filename}`;
+    const contentBase64 = btoa(unescape(encodeURIComponent(fileContent)));
+
+    let sha = null;
+    const checkUrl = `https://api.github.com/repos/GpaJohnsStories/GpasShop/contents/${filePath}`;
+
+    try {
+      const checkResp = await fetch(checkUrl, {
+        headers: { "Authorization": `token ${token}` }
+      });
+      if (checkResp.ok) {
+        const data = await checkResp.json();
+        sha = data.sha;
+      }
+    } catch (err) {
+      console.error("Error checking file:", err);
+    }
+
+    const uploadResp = await fetch(checkUrl, {
+      method: "PUT",
+      headers: {
+        "Authorization": `token ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: `Save product ${filename}`,
+        content: contentBase64,
+        sha: sha || undefined
+      })
+    });
+
+    if (uploadResp.ok) {
+      alert(`Saved to GitHub:\nprod/${filename}`);
+    } else {
+      const errData = await uploadResp.json();
+      alert("GitHub save failed:\n" + JSON.stringify(errData, null, 2));
+    }
+  }
+
+  /* ===============================================================
+     CLEAR FORM FIELDS
+     - Resets all inputs.
+     - Clears preview and finalProductHTML.
+  ================================================================= */
+function clearFormFields() {
+  // element references
+  const codeEl   = document.getElementById('pcode');
+  const titleEl  = document.getElementById('title');
+  const authorEl = document.getElementById('author');
+  const costEl   = document.getElementById('cost');
+  const descEl   = document.getElementById('desc');
+  const interest = document.getElementById('interest');
+  const ptype    = document.getElementById('ptype');
+  const site     = document.getElementById('site');
+  const tagsEl   = document.getElementById('tags');
+  const purlEl   = document.getElementById('purl');
+  const imgurlEl = document.getElementById('imgurl');
+
+  // START: confirm handler entered
+  console.log('clearFormFields START', new Date().toISOString());
+
+  // clear values
+  if (codeEl)   codeEl.value = '';
+  if (titleEl)  titleEl.value = '';
+  if (authorEl) authorEl.value = '';
+  if (costEl)   costEl.value = '';
+  if (descEl)   descEl.value = '';
+  if (tagsEl)   tagsEl.value = '';
+  if (purlEl)   purlEl.value = '';
+  if (imgurlEl) imgurlEl.value = '';
+  if (interest) interest.value = '';
+  if (site)     site.value = '';
+  if (ptype)    ptype.value = '';
+
+  const preview = document.getElementById("previewBox");
+  if (preview) preview.innerHTML = '';
+
+  window.finalProductHTML = '';
+
+  // ---- UNLOCK PRODUCT CODE BUILDER ----
+  window.productCodeLocked = false;
+
+  // Re-arm product code builder after programmatic reset
+  if (interest) { interest.dispatchEvent(new Event('input')); interest.dispatchEvent(new Event('change')); }
+  if (ptype)    { ptype.dispatchEvent(new Event('input')); ptype.dispatchEvent(new Event('change')); }
+  if (site)     { site.dispatchEvent(new Event('input')); site.dispatchEvent(new Event('change')); }
+
+  // END: confirm completion and state
+  console.log('clearFormFields END', {
+    interest: interest?.value,
+    ptype: ptype?.value,
+    site: site?.value,
+    locked: window.productCodeLocked
+  });
+}
+
+  
+/* ===============================================================
+   BUTTON HANDLERS — CLEAN, SINGLE-TRIGGER SETUP
+   (DOM-safe, future-proof)
+================================================================ */
+document.addEventListener("DOMContentLoaded", () => {
+
+  const saveBtn      = document.getElementById("saveBtn");
+  const saveClearBtn = document.getElementById("saveClearBtn");
+  const clearBtn     = document.getElementById("clearBtn");
+  const formatBtn    = document.getElementById("formatBtn");
+
+  const overlay      = document.getElementById("saveConfirmOverlay");
+  const confirmBtn   = document.getElementById("confirmSaveBtn");
+  const cancelBtn    = document.getElementById("cancelSaveBtn");
+
+  let pendingClearAfterSave = false;
+
+  /* -------------------------------------------------------------
+     OPEN SAVE CONFIRMATION MODAL
+  ------------------------------------------------------------- */
+  function openSaveConfirm(clearAfter) {
+
+    // Require a preview before saving
+    if (!window.finalProductHTML) {
+      alert("Preview the listing before saving.");
+      return;
+    }
+
+    const code  = document.getElementById("pcode").value.trim();
+    const title = document.getElementById("title").value.trim();
+    const cost  = document.getElementById("cost").value.trim();
+
+    if (!code || !title) {
+      alert("Product Code and Title are required before saving.");
+      return;
+    }
+
+    document.getElementById("confirmCode").textContent  = code;
+    document.getElementById("confirmTitle").textContent = title;
+    document.getElementById("confirmPrice").textContent =
+      (cost && !isNaN(cost) && Number(cost) > 0)
+        ? "$ " + Number(cost).toFixed(2)
+        : "(no price)";
+
+    pendingClearAfterSave = clearAfter;
+    overlay.style.display = "flex";
+  }
+
+  /* -------------------------------------------------------------
+     CONFIRM SAVE — LOCK IDENTITY + PROCEED
+  ------------------------------------------------------------- */
+  confirmBtn.addEventListener("click", () => {
+
+    overlay.style.display = "none";
+
+    // Lock identity ONLY ON FIRST CONFIRMED SAVE
+    if (!productCodeLocked) {
+      productCodeLocked = true;
+      lockedProductCode = document.getElementById("pcode").value.trim();
+      lockedCardDate    = new Date().toISOString();
+
+      // Disable manual editing of Product Code
+      const pcodeInput = document.getElementById("pcode");
+      if (pcodeInput) pcodeInput.disabled = true;
+    }
+
+    saveProductFile();
+
+    if (pendingClearAfterSave) {
+      clearFormFields();
+    }
+  });
+
+  /* -------------------------------------------------------------
+     CANCEL SAVE — RETURN TO EDITING
+  ------------------------------------------------------------- */
+  cancelBtn.addEventListener("click", () => {
+    overlay.style.display = "none";
+    pendingClearAfterSave = false;
+  });
+
+  /* -------------------------------------------------------------
+     BUTTON HANDLERS
+  ------------------------------------------------------------- */
+  if (saveBtn) {
+    saveBtn.addEventListener("click", () => {
+      openSaveConfirm(false);
+    });
+  }
+
+  if (saveClearBtn) {
+    saveClearBtn.addEventListener("click", () => {
+      openSaveConfirm(true);
+    });
+  }
+
+  if (clearBtn) {
+    clearBtn.addEventListener("click", () => {
+      if (confirm("Clear all fields?")) clearFormFields();
+    });
+  }
+
+  if (formatBtn) {
+    formatBtn.addEventListener("click", () => {
+      formatListing();
+    });
+  }
+
+});
+
+  </script>
+
+</body>
+</html>
