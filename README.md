@@ -1,5 +1,5 @@
-Gpas-Admin is a Github Repository (Repo) for all websites used in the maintainence of Gpa's other websites:
-  Gpas-Kids
+## Gpas-Admin is a Github Repository (Repo) for all websites used in the maintainence of Gpa's other websites:
+  ## Gpas-Kids
   Gpas-Faith
   Gpas-Shop
 
