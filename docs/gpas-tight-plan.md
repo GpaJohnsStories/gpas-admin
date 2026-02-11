@@ -1,5 +1,5 @@
 # GPAS content security and validity plan
-Last Updated: 02/11/2026 @ 11:48 am
+Last Updated: 02/11/2026 @ 12:06 pm
 
 This plan defines a single **content contract** and enforces it in three places:
 
@@ -89,6 +89,8 @@ For all product files sharing the same first four characters (example: `FBF-`), 
 - Must be **lowercase**.
 - Must be **comma-separated**.
 - Must contain **no spaces** (neither around commas nor inside tag tokens).
+- Tags may contain letters, numbers, and hyphens --
+    Examples:laughing-hard,worried-sick,faith-based
 - Must not contain bad words.
 
 ---
