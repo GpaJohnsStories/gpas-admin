@@ -3,11 +3,12 @@
 - Words are included or excluded based on clarity and intent, not length.
 - Short substrings that commonly appear inside innocent words are avoided 
     to prevent false positives caused by short substrings that commonly appear
-    inside innocent words(the “Scunthorpe Problem”).
+    inside innocent words(the "Scunthorpe Problem").
     There also may be false negatives.
-- It is not intended to catch every possible obfuscation.”
+- It is not intended to catch every possible obfuscation.
 
 ## MINUS WORDS
+ass
 asshole
 bastard
 bitch
@@ -29,7 +30,6 @@ horny
 jap
 kill
 killer
-nigger
 nipple
 nipples
 nude
@@ -65,48 +65,44 @@ ass
 assassin
 assess
 assessment
-ассистент
 bass
 bassoon
 brass
+but
 cassette
 chardonnay
+class
+classic
 compass
-crassus
+crap
+crapper
 crass
+crassus
+damn
 embassy
 embarrass
 Essex
+glass
+gras
 harass
 harassment
+hell
 lasses
 Massachusetts
 massage
 Middlesex
 molasses
 morass
-passover
+passage
 passport
 password
 sassafras
 Scunthorpe
-Sussex
-titmouse (bird)
-titan
-titanic
-title
-ass
-assistant
-but
-class
-classic
-crap
-crapper
-damn
-grass
-hell
-passage
 sex
 suck
+Sussex
 tit
-passover
+titan
+titanic
+titmouse (bird)
+title
