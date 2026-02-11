@@ -1,5 +1,5 @@
 # GPAS Shop Design Guide
-Last Update: 2026-02-09 @ 1:10 pm
+Last Update: 2026-02-10 @ 6:30 pm
 
 ## Purpose of this guide
 
@@ -152,4 +152,111 @@ These files are self-contained product cards designed to be loaded into the disp
 ## Product code and file naming
 
 Each product card file uses a seven-character product code:
+
+### Product code structure
+
+- **Position 1 — Interest**
+  - F = Faith
+  - H = Happy / Fun
+
+- **Position 2 — Product type**
+  - T = T-shirts
+  - B = Books & Bibles
+  - O = Other Stuff
+
+- **Position 3 — Site family**
+  - K = gpaskids.com
+  - F = gpasfaith.com
+  - S = gpasshop.com
+
+- **Position 4 — Separator**
+  - Always a dash (-)
+
+- **Positions 5–7 — Sequence number**
+  - Automatically assigned
+  - Starts at 001 if none exist
+
+---
+
+## Metadata inside the product card
+
+Each product card stores key information using `data-*` attributes:
+- product code
+- title
+- author or creator
+- price (if applicable)
+- tags or keywords
+- creation date
+
+---
+
+## Product description
+
+Descriptions are written by Grandpa John, with assistance from Copilot.
+
+They are:
+- usually under 200 words
+- conversational and honest
+- formatted with simple HTML for direct display
+
+---
+
+## The display window (single, shared)
+
+The shop contains **one and only one display window**.
+
+All product exploration flows through this single, stable viewing area.
+
+The display window:
+- has a fixed width
+- has a fixed height
+- scrolls vertically when needed
+- never scrolls horizontally
+
+---
+
+## Separation of responsibilities
+
+- The table defines layout
+- The display window defines boundaries
+- The product card provides content only
+
+---
+
+## Call to action
+
+Each product card ends with a single, clearly labeled button linking to the external retailer.
+
+The shop’s role ends here.
+
+---
+
+## What the shop deliberately avoids
+
+The shop avoids:
+- urgency cues
+- countdowns
+- scarcity language
+- pop-ups
+- behavioral tracking
+
+Trust is earned by restraint.
+
+---
+
+## Relationship to kids and faith
+
+The shop establishes patterns that **gpaskids.com** and **gpasfaith.com** inherit:
+- library-based browsing
+- a single display window
+- calm discovery
+
+---
+
+## Closing note
+
+The GPAS shop is not a funnel.  
+It is a room.
+
+Visitors are welcome to browse, linger, or leave — without explanation.
 
