@@ -140,260 +140,178 @@ Key principles:
 - no cookies or persistent storage on the visitor’s device
 - changes apply only while the visitor remains on the site
 
-## 1. Browser‑Level Accessibility Features
+# 1. Browser‑Level Accessibility Features
     - These are the features your help pages will teach visitors to use.
     - Every major browser supports most of these.
 
 ### A. Read Aloud (Browser Text‑to‑Speech)
     - Reads the webpage out loud.
-
-Edge → Read Aloud (built‑in)
-
-Safari (iOS/macOS) → Speak Screen / Speak Selection
-
-Chrome → “Listen to this page” (Android) or extensions
-
-Firefox → Extensions
-
-Opera → Extensions
-
-Samsung Internet → “Read aloud” (Android)
-
-What your help pages will explain:
-How to turn it on
-
-How to change voice
-
-How to change speed
-
-How to pause/stop
-
-B. Translate Page
-Translates the entire webpage into another language.
-
-Chrome → Auto‑translate or right‑click
-
-Edge → Translate icon or right‑click
-
-Safari → aA menu → Translate
-
-Firefox → Built‑in translation (2024+)
-
-Opera → Uses Google Translate
-
-Samsung Internet → Built‑in translation
-
-What your help pages will explain:
-How to translate
-
-How to switch languages
-
-How to revert to original
-
-C. Reader Mode / Reading View
-Simplifies the page into a clean, book‑like layout.
-
-Edge → Immersive Reader
-
-Safari → Reader View
-
-Firefox → Reader View
-
-Chrome → Reader Mode (desktop)
-
-Opera → Reader Mode
-
-Samsung Internet → Reader Mode
-
-What your help pages will explain:
-How to enter Reader Mode
-
-How to adjust font size
-
-How to adjust spacing
-
-How to change background color
-
-D. High Contrast / Forced Colors Mode
-Overrides your colors to improve readability.
-
-Edge → Honors Windows High Contrast
-
-Chrome → Honors OS settings
-
-Firefox → High Contrast Mode
-
-Safari → Smart Invert / Increase Contrast
-
-Samsung Internet → High Contrast Mode
-
-What your help pages will explain:
-How to turn on high contrast
-
-How to adjust brightness
-
-How to use dark mode
-
-E. Zoom & Pinch‑Zoom
-All browsers support:
-
-Pinch‑zoom (mobile/tablet)
-
-Ctrl + + / – (desktop)
-
-“Zoom Text Only” (Firefox, Safari)
-
-Your universal viewport rule guarantees this works.
-
-F. Built‑in Dictionary / Lookup
-Tap a word → Look Up → definition, synonyms, translation.
-
-Works on:
-
-iPhone
-
-iPad
-
-Android
-
-macOS
-
-G. Caret Browsing (Keyboard Navigation)
-Press F7 → navigate with arrow keys.
-
-Works in:
-
-Chrome
-
-Edge
-
-Firefox
-
-🌟 2. Device / OS‑Level Accessibility Features
-These are NOT browser features — but your help pages can mention them because they work beautifully with your simple HTML.
-
-A. System Text‑to‑Speech
-iOS → Speak Screen, Speak Selection
-
-Android → Select to Speak
-
-Windows → Narrator
-
-macOS → Speech → Start Speaking
-
-B. System Zoom
-Full‑screen zoom
-
-Window zoom
-
-Text‑only zoom
-
-C. Display Adjustments
-Bold text
-
-Larger text
-
-Increased contrast
-
-Reduced transparency
-
-Reduced motion
-
-D. Color Filters
-Grayscale
-
-Invert
-
-Color blindness filters
-
-🌟 3. Screen Readers (with sources)
-These are separate programs, not part of the browser.
-
-Windows — Narrator
-Built into Windows.
-Source: Microsoft Accessibility → “Narrator”
-
-macOS — VoiceOver
-Built into macOS.
-Source: Apple Accessibility → “VoiceOver”
-
-iPhone/iPad — VoiceOver
-Built into iOS.
-Source: Apple Accessibility → “VoiceOver for iOS”
-
-Android — TalkBack
-Built into Android.
-Source: Google Accessibility → “TalkBack”
-
-ChromeOS — ChromeVox
-Built into Chromebooks.
-Source: Google Accessibility → “ChromeVox”
+        Edge → Read Aloud (built‑in)
+        Safari (iOS/macOS) → Speak Screen / Speak Selection
+        Chrome → “Listen to this page” (Android) or extensions
+        Firefox → Extensions
+        Opera → Extensions
+        Samsung Internet → “Read aloud” (Android)
+
+    What your help pages will explain:
+        - How to turn it on
+        - How to change voice
+        - How to change speed
+        - How to pause/stop
+
+### B. Translate Page
+    - Translates the entire webpage into another language.
+        - Chrome → Auto‑translate or right‑click
+        - Edge → Translate icon or right‑click
+        - Safari → aA menu → Translate
+        - Firefox → Built‑in translation (2024+)
+        - Opera → Uses Google Translate
+        - Samsung Internet → Built‑in translation
+    What your help pages will explain:
+        - How to translate
+        - How to switch languages
+        - How to revert to original
+
+### C. Reader Mode / Reading View
+    - Simplifies the page into a clean, book‑like layout.
+        - Edge → Immersive Reader
+        - Safari → Reader View
+        - Firefox → Reader View
+        - Chrome → Reader Mode (desktop)
+        - Opera → Reader Mode
+        - Samsung Internet → Reader Mode
+    What your help pages will explain:
+        - How to enter Reader Mode
+        - How to adjust font size
+        - How to adjust spacing
+        - How to change background color
+
+### D. High Contrast / Forced Colors Mode
+    - Overrides your colors to improve readability.
+        - Edge → Honors Windows High Contrast
+        - Chrome → Honors OS settings
+        - Firefox → High Contrast Mode
+        - Safari → Smart Invert / Increase Contrast
+        - Samsung Internet → High Contrast Mode
+    - What your help pages will explain:
+        - How to turn on high contrast
+        - How to adjust brightness
+        - How to use dark mode
+
+### E. Zoom & Pinch‑Zoom
+    - All browsers support:
+        - Pinch‑zoom (mobile/tablet)
+        - Ctrl + + / – (desktop)
+        - “Zoom Text Only” (Firefox, Safari)
+    - Your universal viewport rule guarantees this works.
+
+### F. Built‑in Dictionary / Lookup
+    - Tap a word → Look Up → definition, synonyms, translation.
+    - Works on:
+        - iPhone
+        - iPad
+        - Android
+        - macOS
+
+### G. Caret Browsing (Keyboard Navigation)
+    - Press F7 → navigate with arrow keys.
+    - Works in:
+        - Chrome
+        - Edge
+        - Firefox
+# 2. Device / OS‑Level Accessibility Features
+    - These are NOT browser features — but your help pages can mention them 
+        because they work beautifully with your simple HTML.
+
+### A. System Text‑to‑Speech
+        - iOS → Speak Screen, Speak Selection
+        - Android → Select to Speak
+        - Windows → Narrator
+        - macOS → Speech → Start Speaking
+
+### B. System Zoom
+        - Full‑screen zoom
+        - Window zoom
+        - Text‑only zoom
+
+### C. Display Adjustments
+        - Bold text
+        - Larger text
+        - Increased contrast
+        - Reduced transparency
+        - Reduced motion
+
+### D. Color Filters
+        - Grayscale
+        - Invert
+        - Color blindness filters
+
+# 3. Screen Readers (with sources)
+    - These are separate programs, not part of the browser.
+        - Windows — Narrator
+            Built into Windows.
+            Source: Microsoft Accessibility → “Narrator”
+        - macOS — VoiceOver
+            Built into macOS.
+            Source: Apple Accessibility → “VoiceOver”
+        - iPhone/iPad — VoiceOver
+            Built into iOS.
+            Source: Apple Accessibility → “VoiceOver for iOS”
+        - Android — TalkBack
+            Built into Android.
+            Source: Google Accessibility → “TalkBack”
+        - ChromeOS — ChromeVox
+            Built into Chromebooks.
+            Source: Google Accessibility → “ChromeVox”
 
 These are the only screen readers your visitors are likely to use.
 
-🌟 4. HTML Practices That Make Your Pages Accessible
-You’re already doing most of this naturally.
-
-Use <h1>, <h2>, <h3> in order
-
-Use <p> for paragraphs
-
-Use <ul> and <li> for lists
-
-Use <a> for links
-
-Use alt="" for images
-
-Avoid empty <div>s
-
-Avoid JavaScript‑only navigation
-
-Avoid popups
-
-Avoid overlays
-
-Avoid disabling right‑click (important!)
+# 4. HTML Practices That Make Your Pages Accessible
+    - You’re already doing most of this naturally.
+        - Use <h1>, <h2>, <h3> in order
+        - Use <p> for paragraphs
+        - Use <p> for paragraphs
+        - Use <ul> and <li> for lists
+        - Use <a> for links
+        - Use alt="" for images
+        - Avoid empty <div>s
+        - Avoid JavaScript‑only navigation
+        - Avoid popups
+        - Avoid overlays
+        - Avoid disabling right‑click (important!)
 
 Your clean HTML is a dream for screen readers.
 
-🌟 5. Suggested Structure for Each Help Page
-Each browser‑specific help page should include:
+# 5. Suggested Structure for Each Help Page
+    - Each browser‑specific help page should include:
+        1. Read Aloud
+            How to turn it on
+            How to change voice
+            How to change speed
+        2. Translate This Page
+            How to translate
+            How to switch languages
+        3. Reader Mode
+            How to enter
+            How to adjust font and spacing
+        4. Zoom
+            Pinch‑zoom
+            Browser zoom
+            Text‑only zoom
+        5. High Contrast / Dark Mode
+            How to enable
+            How to adjust
+        6. System Tools
+            Speak Screen
+            Speak Selection
+            VoiceOver / TalkBack
+            Narrator
+        7. Optional: Saving for Offline Reading
+            Add to Reading List
+            Save Page
 
-1. Read Aloud
-How to turn it on
-How to change voice
-How to change speed
-
-2. Translate This Page
-How to translate
-How to switch languages
-
-3. Reader Mode
-How to enter
-How to adjust font and spacing
-
-4. Zoom
-Pinch‑zoom
-Browser zoom
-Text‑only zoom
-
-5. High Contrast / Dark Mode
-How to enable
-How to adjust
-
-6. System Tools
-Speak Screen
-Speak Selection
-VoiceOver / TalkBack
-Narrator
-
-7. Optional: Saving for Offline Reading
-Add to Reading List
-Save Page
-
-
-<script>
 ## CODE FOR BROWSER DETECTION FOR ACCESSIBILITY HELP BUTTON
+<script>
   /*
     ------------------------------------------------------------
     BROWSER DETECTION FOR ACCESSIBILITY HELP BUTTON
