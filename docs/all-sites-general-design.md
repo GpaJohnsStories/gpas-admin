@@ -77,6 +77,10 @@ Design assumptions:
 - pages must work comfortably on tablets first
 - phone layouts must remain readable and touch‑friendly
 - desktop layouts should feel intentional but never required
+- ALL PAGES, without any exceptions, MUST allow viewer to pinch-zoom
+    using this code or something similar:
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
 
 ### Admin site
 - **Required device:** desktop or laptop
