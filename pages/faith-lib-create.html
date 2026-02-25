@@ -1,1 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
+  <!-- ============================================================
+       AUTHENTICATION GATE
+       ------------------------------------------------------------
+       This runs immediately when the page loads.
+       If the GitHub token is missing, the user is redirected
+       to the login page BEFORE anything renders.
+       ============================================================ -->
+  <script>
+    const token = sessionStorage.getItem("githubToken");
+    if (!token) {
+      window.location.href = "../index.html";
+    }
+  </script>
+
+  <meta charset="UTF-8">
+  <meta name="google" content="notranslate">
+  <title>Faith Library – Create Item</title>
+
+</head>
+
+<body style="margin:0; font-family:Lexend, sans-serif; background:#f9f9f9;">
+
+  <!-- ============================================================
+       ADMIN MENU (LOADED VIA IFRAME)
+       ------------------------------------------------------------
+       The admin menu:
+       - Handles site selection
+       - Sets selectedSite / selectedRepo in sessionStorage
+       - Does NOT know which page it is embedded in
+       - Loads asynchronously
+       ============================================================ -->
+  <iframe
+    id="adminMenuFrame"
+    title="Admin Menu"
+    style="
+      width:1220px;
+      height:68px;
+      border:none;
+      display:block;
+      position:sticky;
+      top:0;
+      z-index:999;
+      background:white;
+      margin:0 auto 20px auto;
+      overflow:hidden;
+    ">
+  </iframe>
+
+  <!-- Always load the newest version of the admin menu -->
+  <script>
+    document.getElementById("adminMenuFrame").src =
+      "admin-menu.html?v=" + Date.now();
+  </script>
+
+  <!-- ============================================================
+       PAGE BODY PLACEHOLDER
+       ------------------------------------------------------------
+       This is intentionally empty.
+       You will later add:
+         - Table 1: Content Identity
+         - Table 2: Discovery & Context
+       ============================================================ -->
+  <div
+    style="
+      width:1200px;
+      margin:0 auto;
+    ">
+    <!-- Faith library creation tables will go here -->
+  </div>
+
+  <!-- ============================================================
+       FAITH SITE ENFORCEMENT
+       ------------------------------------------------------------
+       IMPORTANT:
+       - The admin menu loads asynchronously in an iframe
+       - selectedSite / selectedRepo are set by the menu
+       - We must WAIT until those values exist
+       - Only AFTER auth + menu init do we enforce FAITH
+       ============================================================ -->
+  <script>
+    (function enforceFaithContext() {
+
+      const REQUIRED_SITE = "FAITH";
+      const REQUIRED_REPO = "gpasfaith";
+
+      let attempts = 0;
+      const MAX_ATTEMPTS = 20;
+
+      const interval = setInterval(() => {
+
+        const site = sessionStorage.getItem("selectedSite");
+        const repo = sessionStorage.getItem("selectedRepo");
+
+        // Only proceed once the menu has initialized
+        if (site && repo) {
+          clearInterval(interval);
+
+          // If user is authenticated but on the wrong site,
+          // force FAITH context and reload so the menu updates
+          if (site !== REQUIRED_SITE) {
+            sessionStorage.setItem("selectedSite", REQUIRED_SITE);
+            sessionStorage.setItem("selectedRepo", REQUIRED_REPO);
+            window.location.reload();
+          }
+        }
+
+        // Safety stop to prevent infinite polling
+        attempts++;
+        if (attempts > MAX_ATTEMPTS) {
+          clearInterval(interval);
+        }
+
+      }, 100);
+
+    })();
+  </script>
+
+</body>
+</html>
