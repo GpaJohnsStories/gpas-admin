@@ -9,12 +9,25 @@
        If the GitHub token is missing, the user is redirected
        to the login page BEFORE anything renders.
        ============================================================ -->
-  <script>
-    const token = sessionStorage.getItem("githubToken");
-    if (!token) {
-      window.location.href = "../index.html";
-    }
-  </script>
+ <script>
+  /*
+    AUTHENTICATION GATE WITH RETURN-TO SUPPORT
+
+    - Runs immediately when the page loads
+    - If no GitHub token is present:
+        • Save the current page path
+        • Redirect to the login screen
+    - Login page will send the user back here after success
+  */
+
+  const token = sessionStorage.getItem("githubToken");
+
+  if (!token) {
+    sessionStorage.setItem("returnTo", window.location.pathname);
+    window.location.href = "../index.html";
+  }
+</script>
+
 
   <meta charset="UTF-8">
   <meta name="google" content="notranslate">
@@ -72,52 +85,59 @@
     <!-- Faith library creation tables will go here -->
   </div>
 
-  <!-- ============================================================
-       FAITH SITE ENFORCEMENT
-       ------------------------------------------------------------
-       IMPORTANT:
-       - The admin menu loads asynchronously in an iframe
-       - selectedSite / selectedRepo are set by the menu
-       - We must WAIT until those values exist
-       - Only AFTER auth + menu init do we enforce FAITH
-       ============================================================ -->
-  <script>
-    (function enforceFaithContext() {
+ <script>
+  /*
+    FAITH SITE ENFORCEMENT
 
-      const REQUIRED_SITE = "FAITH";
-      const REQUIRED_REPO = "gpasfaith";
+    Page classification:
+      • Single-site admin page
+      • Writes content ONLY to the FAITH repo
+      • Must never operate under another site context
 
-      let attempts = 0;
-      const MAX_ATTEMPTS = 20;
+    How this works:
+      - Admin menu loads asynchronously in an iframe
+      - Menu sets selectedSite / selectedRepo in sessionStorage
+      - This script waits until those values exist
+      - If the site is not FAITH:
+          • Force FAITH + gpasfaith
+          • Reload so the menu reflects the change
+  */
 
-      const interval = setInterval(() => {
+  (function enforceFaithContext() {
 
-        const site = sessionStorage.getItem("selectedSite");
-        const repo = sessionStorage.getItem("selectedRepo");
+    const REQUIRED_SITE = "FAITH";
+    const REQUIRED_REPO = "gpasfaith";
 
-        // Only proceed once the menu has initialized
-        if (site && repo) {
-          clearInterval(interval);
+    let attempts = 0;
+    const MAX_ATTEMPTS = 20;
 
-          // If user is authenticated but on the wrong site,
-          // force FAITH context and reload so the menu updates
-          if (site !== REQUIRED_SITE) {
-            sessionStorage.setItem("selectedSite", REQUIRED_SITE);
-            sessionStorage.setItem("selectedRepo", REQUIRED_REPO);
-            window.location.reload();
-          }
-        }
+    const interval = setInterval(() => {
 
-        // Safety stop to prevent infinite polling
+      const site = sessionStorage.getItem("selectedSite");
+      const repo = sessionStorage.getItem("selectedRepo");
+
+      // Wait until the admin menu has initialized
+      if (!site || !repo) {
         attempts++;
-        if (attempts > MAX_ATTEMPTS) {
-          clearInterval(interval);
-        }
+        if (attempts > MAX_ATTEMPTS) clearInterval(interval);
+        return;
+      }
 
-      }, 100);
+      clearInterval(interval);
 
-    })();
-  </script>
+      // Enforce FAITH context if needed
+      if (site !== REQUIRED_SITE) {
+        sessionStorage.setItem("selectedSite", REQUIRED_SITE);
+        sessionStorage.setItem("selectedRepo", REQUIRED_REPO);
+        window.location.reload();
+      }
 
+      // If already FAITH, do nothing
+
+    }, 100);
+
+  })();
+</script>
+  
 </body>
 </html>
