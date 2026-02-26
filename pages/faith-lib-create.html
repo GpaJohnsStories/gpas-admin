@@ -77,14 +77,84 @@
       "admin-menu.html?v=" + Date.now();
   </script>
 
-  <!-- ============================================================
-       PAGE BODY PLACEHOLDER
-       ------------------------------------------------------------
-       This is intentionally empty.
-       You will later add:
-         - Table 1: Content Identity
-         - Table 2: Discovery & Context
-       ============================================================ -->
+ <!-- ============================================================
+     TABLE 1 (FRAMEWORK ONLY)
+     ------------------------------------------------------------
+     Row 0 is a "width-lock" row (height 0) so later rows do NOT
+     need to carry width information in every <td>.
+     ============================================================ -->
+
+<table
+  id="faithLibTable1"
+  style="
+    width:1258px;                 /* 100+200+4+100+400+4+150+150+150 */
+    margin-left:auto;
+    margin-right:auto;
+    border-collapse:collapse;
+    border:1px solid #999;
+  "
+>
+  <tbody>
+
+    <!-- ========================================================
+         Row 0  (HEIGHT = 0px)
+         --------------------------------------------------------
+         - ALL <td> elements are on ONE LINE each (per request)
+         - Each <td> includes width AND height:0px AND border
+         - Purpose is to lock column widths
+         ======================================================== -->
+    <tr style="height:0px;">
+      <td style="width:100px; height:0px; border:1px solid #999; padding:0;"></td><!-- Row 0, Col 1 -->
+      <td style="width:200px; height:0px; border:1px solid #999; padding:0;"></td><!-- Row 0, Col 2 -->
+      <td style="width:4px; height:0px; border:1px solid #999; padding:0;"></td><!-- Row 0, Col 3 -->
+      <td style="width:100px; height:0px; border:1px solid #999; padding:0;"></td><!-- Row 0, Col 4 -->
+      <td style="width:400px; height:0px; border:1px solid #999; padding:0;"></td><!-- Row 0, Col 5 -->
+      <td style="width:4px; height:0px; border:1px solid #999; padding:0;"></td><!-- Row 0, Col 6 -->
+      <td style="width:150px; height:0px; border:1px solid #999; padding:0;"></td><!-- Row 0, Col 7 -->
+      <td style="width:150px; height:0px; border:1px solid #999; padding:0;"></td><!-- Row 0, Col 8 -->
+      <td style="width:150px; height:0px; border:1px solid #999; padding:0;"></td><!-- Row 0, Col 9 -->
+    </tr>
+
+    <!-- ========================================================
+         Row 1  (HEIGHT = 50px)
+         --------------------------------------------------------
+         - Framework row only
+         - Cells intentionally EMPTY
+         - Uses your preferred <td> comment pattern
+         ======================================================== -->
+    <tr style="height:50px;">
+
+      <td style="border:1px solid #999;"><!-- Row 1, Col 1 -->
+      </td>
+
+      <td style="border:1px solid #999;"><!-- Row 1, Col 2 -->
+      </td>
+
+      <td style="border:1px solid #999;"><!-- Row 1, Col 3 -->
+      </td>
+
+      <td style="border:1px solid #999;"><!-- Row 1, Col 4 -->
+      </td>
+
+      <td style="border:1px solid #999;"><!-- Row 1, Col 5 -->
+      </td>
+
+      <td style="border:1px solid #999;"><!-- Row 1, Col 6 -->
+      </td>
+
+      <td style="border:1px solid #999;"><!-- Row 1, Col 7 -->
+      </td>
+
+      <td style="border:1px solid #999;"><!-- Row 1, Col 8 -->
+      </td>
+
+      <td style="border:1px solid #999;"><!-- Row 1, Col 9 -->
+      </td>
+
+    </tr>
+
+  </tbody>
+</table>
   <div
     style="
       width:1200px;
